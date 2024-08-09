@@ -1,0 +1,64 @@
+{
+  "name": "bentonow/bento-laravel-sdk",
+  "description": "Laravel SDK for Bento",
+  "keywords": [
+    "Bento",
+    "Bentonow",
+    "bento",
+    "bentonow",
+    "email",
+    "transactional",
+    "laravel-driver"
+  ],
+  "homepage": "https://github.com/bentonow/bento-laravel-sdk",
+  "license": "MIT",
+  "type": "library",
+  "authors": [
+    {
+      "name": "Aaron Francis",
+      "email": "hello@aaronfrancis.com",
+      "homepage": "https://aaronfrancis.com",
+      "role": "Developer"
+    },
+    {
+      "name": "Zachary Oakes",
+      "email": "zachary.oakes@gmail.com",
+      "homepage": "https://www.zacharyoakes.com",
+      "role": "Developer"
+    }
+  ],
+  "require": {
+    "php": ">=8.0"
+  },
+  "require-dev": {
+  },
+  "autoload": {
+    "psr-4": {
+      "bentonow\\BentoLaravel\\": "src"
+    }
+  },
+  "autoload-dev": {
+    "psr-4": {
+      "bentonow\\BentoLaravel\\tests\\": "tests"
+    }
+  },
+  "scripts": {
+    "test": "vendor/bin/phpunit"
+  },
+  "config": {
+    "sort-packages": true,
+    "allow-plugins": {
+      "php-http/discovery": false
+    }
+  },
+  "extra": {
+    "laravel": {
+      "providers": [
+        "Bentonow\\BentoLaravel\\BentoLaravelServiceProvider"
+      ],
+      "aliases": {
+        "BentoLaravel": "Bentonow\\BentoLaravel\\BentoLaravelFacade"
+      }
+    }
+  }
+}
