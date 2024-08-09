@@ -1,13 +1,21 @@
-# 🍱 Bento for Laravel
-Provides a Bento mailer integration for [Laravel](https://www.laravel.com).
+# Bento SDK for Laravel (Mailer Only)
 
-Email & Automation for FAST Growing Startups
+🍱 Simple way to send email in your Laravel projects!
+
+👋 To get personalized support, please tweet @bento or email jesse@bentonow.com!
+
+🐶 Battle-tested by [High Performance SQLite](https://highperformancesqlite.com/) (a Bento customer)!
+
+⚡️ For event tracking and importing data into Bento please use our [Bento PHP SDK](https://github.com/bentonow/bento-php-sdk#Installation-Laravel).
+
+❤️ Thank you [@aarondfrancis](https://github.com/aarondfrancis) for your contribution.
+❤️ Thank you [@ziptied](*https%3A//github.com/ziptied*) for your contribution.
 
 ## Requirements
 
 * [PHP 8.0+](https://php.net/releases/)
 * [Laravel 10.0+](https://www.laravel.com)
-* [API Keys from Bentonow](https://www.bentono.com)
+* [Bento API Keys](https://app.bentonow.com/account/teams)
 
 ## Setup
 #### Installation
@@ -28,9 +36,11 @@ Next create a new mailer definition within your application's `config/mail.php` 
   'transport' => 'bento',
 ],
 ```
+(Side note: we recommend using Laravel Mail Viewer when working in development (https://laravel-news.com/laravel-mail-viewer). 
 
-Finally, visit your [bento profile](https://app.bentonow.com/account) and generate your api keys.
-Add the Api keys to your `.env` and set your **mail_mailer** to use bento:
+Finally, visit your [bento profile](https://app.bentonow.com/account) and generate your API keys.
+
+Add the API keys to your `.env` and set your **mail_mailer** to use Bento:
 ```*dotenv*
 BENTO_PUBLISHABLE_KEY="{Publishable Key}"
 BENTO_SECRET_KEY="{Secret Key}"
@@ -44,15 +54,8 @@ For additional information please refer to [Laravel Mail documentation](https://
 
 In case you find any bugs, submit an issue directly here in GitHub.
 
-To get personalized support, please tweet @bento or email ~[jesse@bentonow.com](*mailto:jesse@bentonow.com*)~
-
 Official API documentation is at [https://docs.bentonow.com](*https://docs.bentonow.com*)
 
 ## License
 
 [The MIT License (MIT)](*LICENSE.md*)
-
-## Authors
-
-- [@aarondfrancis](https://github.com/aarondfrancis)
-- [@ziptied](*https%3A//github.com/ziptied*)
