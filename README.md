@@ -6,7 +6,7 @@ Email & Automation for FAST Growing Startups
 ## Requirements
 
 * [PHP 8.0+](https://php.net/releases/)
-* [Laravel 9.0+](https://www.laravel.com)
+* [Laravel 10.0+](https://www.laravel.com)
 * [API Keys from Bentonow](https://www.bentono.com)
 
 ## Setup
