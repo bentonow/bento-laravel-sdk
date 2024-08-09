@@ -1,6 +1,6 @@
 <?php
 
-namespace Bentonow\BentoLaravel;
+namespace Bentonow\BentoLaravel\Console;
 
 use Illuminate\Console\Command;
 
