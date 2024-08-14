@@ -31,24 +31,25 @@
     "php": ">=8.0"
   },
   "require-dev": {
+    "orchestra/testbench": "^9.2",
+    "pestphp/pest": "^2.35",
+    "pestphp/pest-plugin-laravel": "^2.4",
+    "spatie/ray": "^1.27"
   },
   "autoload": {
     "psr-4": {
-      "bentonow\\BentoLaravel\\": "src"
-    }
-  },
-  "autoload-dev": {
-    "psr-4": {
-      "bentonow\\BentoLaravel\\tests\\": "tests"
+      "Bentonow\\BentoLaravel\\": "src/",
+      "Bentonow\\BentoLaravel\\Tests\\": "tests/"
     }
   },
   "scripts": {
-    "test": "vendor/bin/phpunit"
+    "test": "vendor/bin/pest"
   },
   "config": {
     "sort-packages": true,
     "allow-plugins": {
-      "php-http/discovery": false
+      "php-http/discovery": false,
+      "pestphp/pest-plugin": true
     }
   },
   "extra": {
