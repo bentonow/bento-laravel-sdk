@@ -7,7 +7,7 @@ use Illuminate\Support\Facades\Mail;
 
 class BentoLaravelServiceProvider extends ServiceProvider
 {
-    public function boot()
+    public function boot(): void
     {
         if ($this->app->runningInConsole()) {
             $this->commands([
@@ -24,7 +24,7 @@ class BentoLaravelServiceProvider extends ServiceProvider
         });
     }
 
-    public function register()
+    public function register(): void
     {
         $this->mergeConfigFrom(
             __DIR__.'/../config/bentonow.php',
