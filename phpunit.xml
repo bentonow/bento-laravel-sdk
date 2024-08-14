@@ -15,11 +15,6 @@
             <directory suffix=".php">./src</directory>
         </include>
     </source>
-    <coverage>
-        <include>
-            <directory suffix=".php">src/</directory>
-        </include>
-    </coverage>
     <php>
         <env name="APP_ENV" value="testing"/>
         <env name="mail_mailer" value="bento" />
