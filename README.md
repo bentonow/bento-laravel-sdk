@@ -1,4 +1,6 @@
 # Bento SDK for Laravel (Mailer Only)
+[![Tests](https://github.com/bentonow/bento-laravel-sdk/actions/workflows/tests.yml/badge.svg?branch=main)](https://github.com/bentonow/bento-laravel-sdk/actions/workflows/tests.yml)
+
 
 🍱 Simple way to send email in your Laravel projects!
 
