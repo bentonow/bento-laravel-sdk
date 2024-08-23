@@ -8,6 +8,7 @@ use Illuminate\Support\Facades\Http;
 use Symfony\Component\Mailer\SentMessage;
 use Symfony\Component\Mailer\Transport\AbstractTransport;
 use Symfony\Component\Mime\MessageConverter;
+
 class BentoTransport extends AbstractTransport
 {
     protected function doSend(SentMessage $message): void
@@ -25,17 +26,18 @@ class BentoTransport extends AbstractTransport
                 )
                 ->post('/api/v1/batch/emails', [
                     'emails' => [[
-                        "to" => $mailDetails->toAddress,
-                        "from" => $mailDetails->fromAddress,
-                        "subject" => $email->getSubject(),
-                        "html_body" => $email->getHtmlBody(),
-                        "transactional" => true,
-                    ]]
+                        'to' => $mailDetails->toAddress,
+                        'from' => $mailDetails->fromAddress,
+                        'subject' => $email->getSubject(),
+                        'html_body' => $email->getHtmlBody(),
+                        'transactional' => true,
+                    ]],
                 ])
                 ->throw();
         } catch (ConnectionException|RequestException $e) {
         }
     }
+
     public function __toString(): string
     {
         return 'bento';

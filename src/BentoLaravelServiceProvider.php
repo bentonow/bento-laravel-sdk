@@ -2,8 +2,8 @@
 
 namespace Bentonow\BentoLaravel;
 
-use Illuminate\Support\ServiceProvider;
 use Illuminate\Support\Facades\Mail;
+use Illuminate\Support\ServiceProvider;
 
 class BentoLaravelServiceProvider extends ServiceProvider
 {

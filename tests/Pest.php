@@ -13,7 +13,7 @@
 
 use Bentonow\BentoLaravel\Tests\TestCase;
 
-uses(TestCase::class)->in( __DIR__ );
+uses(TestCase::class)->in(__DIR__);
 /*
 |--------------------------------------------------------------------------
 | Expectations
