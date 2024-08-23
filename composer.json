@@ -31,6 +31,7 @@
     "php": ">=8.0"
   },
   "require-dev": {
+    "laravel/pint": "^1.17",
     "orchestra/testbench": "^9.2",
     "pestphp/pest": "^2.35",
     "pestphp/pest-plugin-laravel": "^2.4",
