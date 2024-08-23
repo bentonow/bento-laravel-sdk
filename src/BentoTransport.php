@@ -18,11 +18,11 @@ class BentoTransport extends AbstractTransport
         try {
             Http::baseUrl('https://app.bentonow.com')
                 ->withQueryParameters([
-                    'site_uuid' => config('bentonow.siteUUID'),
+                    'site_uuid' => config('bentonow.site_uuid'),
                 ])
                 ->withBasicAuth(
-                    username: config('bentonow.publishableKey'),
-                    password: config('bentonow.secretKey')
+                    username: config('bentonow.publishable_key'),
+                    password: config('bentonow.secret_key')
                 )
                 ->post('/api/v1/batch/emails', [
                     'emails' => [[
