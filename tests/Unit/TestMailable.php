@@ -9,10 +9,7 @@ use Illuminate\Mail\Mailables\Envelope;
 
 class TestMailable extends Mailable
 {
-    public function __construct()
-    {
-        //
-    }
+    public function __construct() {}
 
     /**
      * Get the message envelope.

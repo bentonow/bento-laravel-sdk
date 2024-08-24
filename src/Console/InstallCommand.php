@@ -30,7 +30,7 @@ class InstallCommand extends Command
             }
         }
 
-        $this->info('Ledger has been installed!');
+        $this->info('Bento has been installed!');
 
         return self::SUCCESS;
     }
