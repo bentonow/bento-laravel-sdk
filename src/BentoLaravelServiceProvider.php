@@ -2,8 +2,9 @@
 
 namespace Bentonow\BentoLaravel;
 
-use Illuminate\Support\ServiceProvider;
+use Bentonow\BentoLaravel\Console\InstallCommand;
 use Illuminate\Support\Facades\Mail;
+use Illuminate\Support\ServiceProvider;
 
 class BentoLaravelServiceProvider extends ServiceProvider
 {
@@ -11,7 +12,7 @@ class BentoLaravelServiceProvider extends ServiceProvider
     {
         if ($this->app->runningInConsole()) {
             $this->commands([
-                \Bentonow\BentoLaravel\Console\InstallCommand::class,
+                InstallCommand::class,
             ]);
 
             $this->publishes([
@@ -28,8 +29,7 @@ class BentoLaravelServiceProvider extends ServiceProvider
     {
         $this->mergeConfigFrom(
             __DIR__.'/../config/bentonow.php',
-            'bento'
+            'bentonow'
         );
-
     }
 }

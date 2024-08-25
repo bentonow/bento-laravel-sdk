@@ -5,37 +5,37 @@ namespace Bentonow\BentoLaravel;
 use Illuminate\Http\Client\ConnectionException;
 use Illuminate\Http\Client\RequestException;
 use Illuminate\Support\Facades\Http;
+use Symfony\Component\Mailer\Exception\TransportException;
 use Symfony\Component\Mailer\SentMessage;
 use Symfony\Component\Mailer\Transport\AbstractTransport;
-use Symfony\Component\Mime\MessageConverter;
+
 class BentoTransport extends AbstractTransport
 {
+    private const HOST = 'app.bentonow.com';
+
     protected function doSend(SentMessage $message): void
     {
-        $email = MessageConverter::toEmail($message->getOriginalMessage());
-        $mailDetails = MailDetails::fromEmail($email);
         try {
-            Http::baseUrl('https://app.bentonow.com')
+            $bodyParameters = (new SentMessagePayloadTransformer)
+                ->transform($message);
+
+            Http::baseUrl(sprintf('https://%s', self::HOST))
                 ->withQueryParameters([
-                    'site_uuid' => config('bentonow.siteUUID'),
+                    'site_uuid' => config('bentonow.site_uuid', config('bentonow.siteUUID')),
                 ])
                 ->withBasicAuth(
-                    username: config('bentonow.publishableKey'),
-                    password: config('bentonow.secretKey')
+                    config('bentonow.publishable_key', config('bentonow.publishableKey')),
+                    config('bentonow.secret_key', config('bentonow.secretKey')),
                 )
-                ->post('/api/v1/batch/emails', [
-                    'emails' => [[
-                        "to" => $mailDetails->toAddress,
-                        "from" => $mailDetails->fromAddress,
-                        "subject" => $email->getSubject(),
-                        "html_body" => $email->getHtmlBody(),
-                        "transactional" => true,
-                    ]]
-                ])
-                ->throw();
+                ->post('/api/v1/batch/emails', $bodyParameters)
+                ->throw()
+                ->body();
+
         } catch (ConnectionException|RequestException $e) {
+            throw new TransportException('Failed to send email via BentoTransport', 0, $e);
         }
     }
+
     public function __toString(): string
     {
         return 'bento';
