@@ -1,5 +1,10 @@
 <?php
 
 use Bentonow\BentoLaravel\Tests\TestCase;
+use Saloon\Config;
+use Saloon\Http\Faking\MockClient;
 
-uses(TestCase::class)->in(__DIR__);
+Config::preventStrayRequests();
+uses(TestCase::class)
+    ->beforeEach(fn () => MockClient::destroyGlobal())
+    ->in(__DIR__);

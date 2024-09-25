@@ -1,0 +1,11 @@
+<component name="ProjectRunConfigurationManager">
+  <configuration default="false" name="phpunit.xml" type="PestRunConfigurationType">
+    <option name="pestRunnerSettings">
+      <PestRunner configuration_file="$PROJECT_DIR$/../bento_ten/phpunit.xml" file="$PROJECT_DIR$/tests/Unit/TransportTest.php" method="confirm environment is set to testing" scope="ConfigurationFile" use_alternative_configuration_file="true" />
+    </option>
+    <option name="runnerSettings">
+      <PhpTestRunnerSettings configuration_file="$PROJECT_DIR$/../bento_ten/phpunit.xml" file="$PROJECT_DIR$/tests/Unit/TransportTest.php" method="confirm environment is set to testing" scope="ConfigurationFile" use_alternative_configuration_file="true" />
+    </option>
+    <method v="2" />
+  </configuration>
+</component>
