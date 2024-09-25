@@ -14,8 +14,7 @@ class ValidateEmail extends Request
 
     public function __construct(
         private readonly ValidateEmailData $data
-    ) {
-    }
+    ) {}
 
     public function resolveEndpoint(): string
     {
@@ -31,8 +30,4 @@ class ValidateEmail extends Request
             'ip' => $this->data->ipAddress,
         ];
     }
-
-}
-{
-
 }

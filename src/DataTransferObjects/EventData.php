@@ -11,6 +11,5 @@ class EventData
         public readonly string $email,
         public readonly ?array $fields = null,
         public readonly ?array $details = null,
-    ) {
-    }
+    ) {}
 }

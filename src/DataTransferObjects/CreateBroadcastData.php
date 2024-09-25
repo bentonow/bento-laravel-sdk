@@ -9,17 +9,16 @@ use Bentonow\BentoLaravel\Enums\BroadcastType;
 class CreateBroadcastData
 {
     public function __construct(
-        public readonly string          $name,
-        public readonly string          $subject,
-        public readonly string          $content,
-        public readonly BroadcastType   $type,
-        public readonly ContactData     $from,
-        public readonly string          $inclusive_tags,
-        public readonly string          $exclusive_tags,
-        public readonly string          $segment_id,
-        public readonly int             $batch_size_per_hour,
-    ) {
-    }
+        public readonly string $name,
+        public readonly string $subject,
+        public readonly string $content,
+        public readonly BroadcastType $type,
+        public readonly ContactData $from,
+        public readonly string $inclusive_tags,
+        public readonly string $exclusive_tags,
+        public readonly string $segment_id,
+        public readonly int $batch_size_per_hour,
+    ) {}
 
     public function __toArray(): array
     {

@@ -18,8 +18,7 @@ class CreateTag extends Request implements HasBody
 
     public function __construct(
         private readonly CreateTagData $data
-    ) {
-    }
+    ) {}
 
     public function resolveEndpoint(): string
     {
@@ -31,8 +30,7 @@ class CreateTag extends Request implements HasBody
         return [
             'tag' => [
                 'name' => $this->data->name,
-            ]
+            ],
         ];
     }
-
 }

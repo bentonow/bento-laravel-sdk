@@ -14,8 +14,7 @@ class GetSegmentStats extends Request
 
     public function __construct(
         private readonly SegmentStatsData $data
-    ) {
-    }
+    ) {}
 
     public function resolveEndpoint(): string
     {

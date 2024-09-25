@@ -14,8 +14,7 @@ class GetBlacklistStatus extends Request
 
     public function __construct(
         private readonly BlacklistStatusData $data
-    ) {
-    }
+    ) {}
 
     public function resolveEndpoint(): string
     {
@@ -29,5 +28,4 @@ class GetBlacklistStatus extends Request
             'ip' => $this->data->ipAddress,
         ];
     }
-
 }

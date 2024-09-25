@@ -6,6 +6,5 @@ class ContentModerationData
 {
     public function __construct(
         public readonly string $content,
-    ) {
-    }
+    ) {}
 }

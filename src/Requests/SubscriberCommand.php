@@ -4,6 +4,7 @@ declare(strict_types=1);
 
 namespace Bentonow\BentoLaravel\Requests;
 
+use Illuminate\Support\Collection;
 use Saloon\Contracts\Body\HasBody;
 use Saloon\Enums\Method;
 use Saloon\Http\Request;
@@ -15,8 +16,8 @@ class SubscriberCommand extends Request implements HasBody
 
     protected Method $method = Method::POST;
 
-    /* @var array $commands non-empty-array<CommandData> */
-    public function __construct(private readonly array $commands) {}
+    /* @var Collection $commandsCollection non-empty-Collection<EventData> */
+    public function __construct(private readonly Collection $commandsCollection) {}
 
     public function resolveEndpoint(): string
     {
@@ -26,7 +27,7 @@ class SubscriberCommand extends Request implements HasBody
     protected function defaultBody(): array
     {
         return [
-            'command' => $this->commands,
+            'command' => $this->commandsCollection->toArray(),
         ];
     }
 }

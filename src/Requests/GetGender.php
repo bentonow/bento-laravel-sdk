@@ -14,8 +14,7 @@ class GetGender extends Request
 
     public function __construct(
         private readonly GenderData $data
-    ) {
-    }
+    ) {}
 
     public function resolveEndpoint(): string
     {
@@ -28,5 +27,4 @@ class GetGender extends Request
             'name' => $this->data->fullName,
         ];
     }
-
 }

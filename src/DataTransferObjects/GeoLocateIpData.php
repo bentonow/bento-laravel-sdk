@@ -26,6 +26,7 @@ class GeoLocateIpData
                 ),
                 new Exception('Invalid IP address provided.')
             );
+
             return $this->ipAddress = $ipAddress;
         } catch (Throwable $e) {
             throw new Exception('Invalid IP address provided.');

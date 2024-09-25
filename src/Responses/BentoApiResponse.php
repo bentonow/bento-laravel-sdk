@@ -6,6 +6,4 @@ namespace Bentonow\BentoLaravel\Responses;
 
 use Saloon\Http\Response;
 
-class BentoApiResponse extends Response
-{
-}
+class BentoApiResponse extends Response {}

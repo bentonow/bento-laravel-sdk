@@ -13,8 +13,7 @@ class ImportSubscribersData
         public readonly ?array $tags,
         public readonly ?array $removeTags,
         public readonly ?array $fields,
-    ) {
-    }
+    ) {}
 
     public function __toArray(): array
     {
@@ -22,8 +21,8 @@ class ImportSubscribersData
             'email' => $this->email,
             'first_name' => $this->firstName,
             'last_name' => $this->lastName,
-            'tags' => join(',', $this->tags),
-            'remove_tags' => join(',', $this->removeTags)
+            'tags' => implode(',', $this->tags),
+            'remove_tags' => implode(',', $this->removeTags),
         ], $this->fields));
     }
 }

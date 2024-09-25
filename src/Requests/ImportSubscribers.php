@@ -17,9 +17,7 @@ class ImportSubscribers extends Request implements HasBody
     protected Method $method = Method::POST;
 
     /* @var Collection $subscriberCollection non-empty-Collection<ImportSubscribersData> */
-    public function __construct(private readonly Collection $subscriberCollection)
-    {
-    }
+    public function __construct(private readonly Collection $subscriberCollection) {}
 
     public function resolveEndpoint(): string
     {

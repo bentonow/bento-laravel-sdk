@@ -12,6 +12,5 @@ class CommandData
         public readonly Command $command,
         public readonly string $email,
         public readonly mixed $query,
-    ) {
-    }
+    ) {}
 }

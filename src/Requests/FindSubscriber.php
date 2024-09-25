@@ -14,9 +14,7 @@ class FindSubscriber extends Request
 
     protected ?string $response = FindSubscriberResponse::class;
 
-    public function __construct(private readonly string $email)
-    {
-    }
+    public function __construct(private readonly string $email) {}
 
     public function resolveEndpoint(): string
     {

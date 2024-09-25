@@ -8,6 +8,5 @@ class CreateFieldData
 {
     public function __construct(
         public readonly string $key,
-    ) {
-    }
+    ) {}
 }

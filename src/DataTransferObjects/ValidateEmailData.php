@@ -17,9 +17,10 @@ class ValidateEmailData
 
     protected function validateIpAddress(?string $ipAddress): ?string
     {
-        if(empty($ipAddress)) {
+        if (empty($ipAddress)) {
             return null;
         }
+
         return (new GeoLocateIpData($ipAddress))->ipAddress;
     }
 }

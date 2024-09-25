@@ -9,6 +9,5 @@ class ContactData
     public function __construct(
         public readonly string $emailAddress,
         public readonly ?string $name,
-    ) {
-    }
+    ) {}
 }

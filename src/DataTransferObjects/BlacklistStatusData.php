@@ -9,6 +9,5 @@ class BlacklistStatusData
     public function __construct(
         public readonly ?string $domain,
         public readonly ?string $ipAddress
-    ) {
-    }
+    ) {}
 }

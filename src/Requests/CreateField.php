@@ -7,6 +7,7 @@ use Saloon\Contracts\Body\HasBody;
 use Saloon\Enums\Method;
 use Saloon\Http\Request;
 use Saloon\Traits\Body\HasJsonBody;
+
 class CreateField extends Request implements HasBody
 {
     use HasJsonBody;
@@ -15,8 +16,7 @@ class CreateField extends Request implements HasBody
 
     public function __construct(
         private readonly CreateFieldData $data
-    ) {
-    }
+    ) {}
 
     public function resolveEndpoint(): string
     {
@@ -28,8 +28,7 @@ class CreateField extends Request implements HasBody
         return [
             'field' => [
                 'key' => $this->data->key,
-            ]
+            ],
         ];
     }
-
 }

@@ -6,6 +6,5 @@ class GenderData
 {
     public function __construct(
         public readonly string $fullName,
-    ) {
-    }
+    ) {}
 }

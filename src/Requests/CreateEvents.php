@@ -17,9 +17,7 @@ class CreateEvents extends Request implements HasBody
     protected Method $method = Method::POST;
 
     /* @var Collection $eventsCollection non-empty-Collection<EventData> */
-    public function __construct(private readonly Collection $eventsCollection)
-    {
-    }
+    public function __construct(private readonly Collection $eventsCollection) {}
 
     public function resolveEndpoint(): string
     {

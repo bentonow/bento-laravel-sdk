@@ -14,8 +14,7 @@ class GetContentModeration extends Request
 
     public function __construct(
         private readonly ContentModerationData $data
-    ) {
-    }
+    ) {}
 
     public function resolveEndpoint(): string
     {
@@ -28,5 +27,4 @@ class GetContentModeration extends Request
             'content' => $this->data->content,
         ];
     }
-
 }
