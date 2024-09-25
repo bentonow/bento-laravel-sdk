@@ -4,7 +4,6 @@ declare(strict_types=1);
 
 namespace Bentonow\BentoLaravel\Requests;
 
-use Bentonow\BentoLaravel\DataTransferObjects\CreateBroadcastData;
 use Illuminate\Support\Collection;
 use Saloon\Contracts\Body\HasBody;
 use Saloon\Enums\Method;
@@ -19,8 +18,7 @@ class CreateBroadcast extends Request implements HasBody
 
     public function __construct(
         private readonly Collection $broadcastCollection
-    ) {
-    }
+    ) {}
 
     public function resolveEndpoint(): string
     {
@@ -33,5 +31,4 @@ class CreateBroadcast extends Request implements HasBody
             'broadcasts' => $this->broadcastCollection->map(fn ($broadcast) => $broadcast->__toArray()),
         ];
     }
-
 }

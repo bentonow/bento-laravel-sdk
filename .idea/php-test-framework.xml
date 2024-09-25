@@ -5,7 +5,7 @@
       <tool tool_name="Pest">
         <settings>
           <configurations>
-            <local_configuration executable_path="$PROJECT_DIR$/vendor/pestphp/pest/bin/pest" />
+            <local_configuration configuration_file_path="$PROJECT_DIR$/phpunit.xml" executable_path="$PROJECT_DIR$/vendor/pestphp/pest/bin/pest" use_configuration_file="true" />
           </configurations>
         </settings>
       </tool>
