@@ -1,4 +1,4 @@
-# Bento SDK for Laravel (Mailer Only)
+# Bento SDK for Laravel
 [![Tests](https://github.com/bentonow/bento-laravel-sdk/actions/workflows/tests.yml/badge.svg?branch=main)](https://github.com/bentonow/bento-laravel-sdk/actions/workflows/tests.yml)
 
 
@@ -22,18 +22,18 @@
 ## Setup
 #### Installation
 You can install the package via composer:
-```*bash*
+```bash
 composer require bentonow/bento-laravel-sdk
 ```
 
 #### Configuration
 First publish the configuration file
-```*bash*
+```bash
 php artisan vendor:publish --tag bentonow
 ```
 
 Next create a new mailer definition within your application's `config/mail.php` configuration file:
-```*php*
+```php
 'bento' => [
   'transport' => 'bento',
 ],
@@ -51,6 +51,62 @@ MAIL_MAILER="bento"
 ```
 
 For additional information please refer to [Laravel Mail documentation](https://laravel.com/docs/9.x/mail)
+
+# Usage 
+
+Along with sending transactional email via Bento this library also gives you access Bento's REST API which makes it beautifully simple to work with.
+
+### Tracking Events
+```php
+use Bentonow\BentoLaravel\BentoConnector;
+use Bentonow\BentoLaravel\Requests\CreateEvents;
+use Bentonow\BentoLaravel\DataTransferObjects\EventData;
+
+$bento = new BentoConnector();
+
+$data = collect([
+  new EventData(
+    type: "$completed_onboarding",
+    email: "test@example.com",
+    fields: [
+      "first_name" => "John",
+      "last_name" => "Doe"
+    ]
+  )
+]);
+
+$request = new CreateEvents($data);
+$response = $bento->send($request);
+return $data->json();
+```
+
+### Importing Subscribers
+```php
+use Bentonow\BentoLaravel\DataTransferObjects\ImportSubscribersData;
+  use Bentonow\BentoLaravel\BentoConnector;
+  use Bentonow\BentoLaravel\Requests\ImportSubscribers;
+
+  $bento = new BentoConnector();
+
+  $data = collect([
+    new ImportSubscribersData(
+      email: "test@test.com",
+      first_name: "John",
+      last_name: "doe",
+      tags: ["lead", "mql"],
+      removeTags: ["customers"],
+      fields: ["role" => "ceo"]
+    ),
+  ]);
+
+  $request = new ImportSubscribers($data);
+  $response = $bento->send($request);
+  return $response->json();
+```
+
+... and so much more! 
+
+Visit our [API Documentation](https://docs.bentonow.com) to learn more. You can also read about basic [usage in our docs](http://localhost:3000/quickstart#common-setups-patterns).
 
 ## Support and Feedback
 
