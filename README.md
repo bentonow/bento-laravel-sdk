@@ -50,7 +50,7 @@ BENTO_SITE_UUID="{Site Key UUID}"
 MAIL_MAILER="bento"
 ```
 
-For additional information please refer to [Laravel Mail documentation](https://laravel.com/docs/9.x/mail)
+For additional information please refer to [Laravel Mail documentation](https://laravel.com/docs/mail)
 
 # Usage 
 
