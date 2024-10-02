@@ -106,7 +106,7 @@ use Bentonow\BentoLaravel\DataTransferObjects\ImportSubscribersData;
 
 ... and so much more! 
 
-Visit our [API Documentation](https://docs.bentonow.com) to learn more. You can also read about basic [usage in our docs](http://localhost:3000/quickstart#common-setups-patterns).
+Visit our [API Documentation](https://docs.bentonow.com) to learn more. You can also read about basic [usage in our docs](https://docs.bentonow.com/quickstart#common-setups-patterns).
 
 ## Support and Feedback
 
