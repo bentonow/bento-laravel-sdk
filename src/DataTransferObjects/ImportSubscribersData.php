@@ -21,8 +21,8 @@ class ImportSubscribersData
             'email' => $this->email,
             'first_name' => $this->firstName,
             'last_name' => $this->lastName,
-            'tags' => implode(',', $this->tags),
-            'remove_tags' => implode(',', $this->removeTags),
-        ], $this->fields));
+            'tags' => ! empty($this->tags) ? implode(',', $this->tags) : null,
+            'remove_tags' => ! empty($this->removeTags) ? implode(',', $this->removeTags) : null,
+        ], $this->fields ?? []));
     }
 }
