@@ -10,14 +10,22 @@ use Illuminate\Support\Collection;
 
 class UserImportAction
 {
-    public function execute(Collection $users): void
+    private int $success = 0;
+
+    private int $failures = 0;
+
+    public function execute(Collection $users): array
     {
 
         $users->chunk(500)->each(function ($usersChunk): void {
             $bento = new BentoConnector;
             $request = new ImportSubscribers($usersChunk);
-            $bento->send($request);
+            $importResult = $bento->send($request);
+            $this->success = +$importResult->json()['results'];
+            $this->failures = +$importResult->json()['failed'];
         });
+
+        return ['results' => $this->success, 'failed' => $this->failures];
 
     }
 }
