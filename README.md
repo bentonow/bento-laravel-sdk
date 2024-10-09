@@ -1,7 +1,5 @@
-
-<p align="center"><img src="/art/bento-laravel-sdk.png" alt="Bento Laravel SDK"></p>
-
-[![Tests](https://github.com/bentonow/bento-laravel-sdk/actions/workflows/tests.yml/badge.svg?branch=main)](https://github.com/bentonow/bento-laravel-sdk/actions/workflows/tests.yml)
+# Bento Laravel SDK
+<img align="right" src="https://app.bentonow.com/brand/logoanim.gif">
 
 > [!TIP]
 > Need help? Join our [Discord](https://discord.gg/ssXXFRmt5F) or email jesse@bentonow.com for personalized support.
@@ -15,6 +13,8 @@ Get started with our [📚 integration guides](https://docs.bentonow.com), or [�
 ❤️ Thank you [@aarondfrancis](https://github.com/aarondfrancis) for your contribution.
 
 ❤️ Thank you [@ziptied](https://github.com/ziptied) for your contribution.
+
+[![Tests](https://github.com/bentonow/bento-laravel-sdk/actions/workflows/tests.yml/badge.svg?branch=main)](https://github.com/bentonow/bento-laravel-sdk/actions/workflows/tests.yml)
 
 Table of contents
 =================
