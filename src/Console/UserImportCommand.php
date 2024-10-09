@@ -17,6 +17,7 @@ class UserImportCommand extends Command
     protected $name = 'bento:import-users';
 
     private int $success = 0;
+
     private int $failures = 0;
 
     public function handle(): int
@@ -46,6 +47,7 @@ class UserImportCommand extends Command
         });
 
         $this->info("Successfully imported {$this->success} users. Failed to import {$this->failures} users.");
+
         return self::SUCCESS;
     }
 }

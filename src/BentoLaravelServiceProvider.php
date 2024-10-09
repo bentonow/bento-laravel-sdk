@@ -2,7 +2,6 @@
 
 namespace Bentonow\BentoLaravel;
 
-use Bentonow\BentoLaravel\Console\InstallCommand;
 use Illuminate\Support\Facades\Mail;
 use Illuminate\Support\ServiceProvider;
 
