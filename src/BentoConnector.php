@@ -23,6 +23,7 @@ class BentoConnector extends Connector
         return [
             'Accept' => 'application/json',
             'Content-Type' => 'application/json',
+            'User-Agent' => 'bento-laravel-'.config('bentonow.site_uuid'),
         ];
     }
 
