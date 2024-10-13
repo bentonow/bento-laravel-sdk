@@ -88,11 +88,9 @@ MAIL_MAILER="bento"
 Track custom events in your application:
 
 ```php
-use Bentonow\BentoLaravel\BentoConnector;
-use Bentonow\BentoLaravel\Requests\CreateEvents;
+use Bentonow\BentoLaravel\Facades\Bento;
 use Bentonow\BentoLaravel\DataTransferObjects\EventData;
 
-$bento = new BentoConnector();
 $data = collect([
   new EventData(
     type: "$completed_onboarding",
@@ -103,8 +101,8 @@ $data = collect([
     ]
   )
 ]);
-$request = new CreateEvents($data);
-$response = $bento->send($request);
+
+return Bento::trackEvent($data)->json();
 ```
 
 ### Subscriber Management
@@ -112,11 +110,9 @@ $response = $bento->send($request);
 Import subscribers into your Bento account:
 
 ```php
+use Bentonow\BentoLaravel\Facades\Bento;
 use Bentonow\BentoLaravel\DataTransferObjects\ImportSubscribersData;
-use Bentonow\BentoLaravel\BentoConnector;
-use Bentonow\BentoLaravel\Requests\ImportSubscribers;
 
-$bento = new BentoConnector();
 $data = collect([
   new ImportSubscribersData(
     email: "user@example.com",
@@ -127,164 +123,117 @@ $data = collect([
     fields: ["role" => "ceo"]
   ),
 ]);
-$request = new ImportSubscribers($data);
-$response = $bento->send($request);
-```
 
+return Bento::importSubscribers($data)->json();
+```
 
 ### Find Subscriber
 
-Search your site for a subscriber
+Search your site for a subscriber:
 
 ```php
-  use Bentonow\BentoLaravel\BentoConnector;
-  use Bentonow\BentoLaravel\DataTransferObjects\CreateSubscriberData;
-  use Bentonow\BentoLaravel\Requests\FindSubscriber;
+use Bentonow\BentoLaravel\Facades\Bento;
 
-  $bento = new BentoConnector();
-
-  $data = "test@example.com";
-  $request = new FindSubscriber($data);
-  $response = $bento->send($request);
-  return $response->json();
+return Bento::findSubscriber("test@example.com")->json();
 ```
 
 ### Create Subscriber
 
-Creates a subscriber in your account and queues them for indexing.
+Creates a subscriber in your account and queues them for indexing:
 
 ```php
-use Bentonow\BentoLaravel\BentoConnector;
+use Bentonow\BentoLaravel\Facades\Bento;
 use Bentonow\BentoLaravel\DataTransferObjects\CreateSubscriberData;
-use Bentonow\BentoLaravel\Requests\CreateSubscriber;
-
-$bento = new BentoConnector();
 
 $data = collect([
   new CreateSubscriberData(email: "test@example.com")
 ]);
-$request = new CreateSubscriber($data);
-$response = $bento->send($request);
-return $response->json();
-```
 
+return Bento::createSubscriber($data)->json();
+```
 
 ### Run Command
 
-Endpoint to execute a command and change a subscriber's data.
+Execute a command and change a subscriber's data:
 
 ```php
-use Bentonow\BentoLaravel\BentoConnector;
+use Bentonow\BentoLaravel\Facades\Bento;
 use Bentonow\BentoLaravel\DataTransferObjects\CommandData;
-use Bentonow\BentoLaravel\Requests\SubscriberCommand;
 use Bentonow\BentoLaravel\Enums\Command;
 
-$bento = new BentoConnector();
 $data = collect([
   new CommandData(Command::REMOVE_TAG, "test@gmail.com", "test")
 ]);
-$request = new SubscriberCommand($data);
-$response = $bento->send($request);
-return $response->json();
-```
 
+return Bento::subscriberCommand($data)->json();
+```
 
 ### Get Tags
 
-Returns a list of tags in your account.
+Returns a list of tags in your account:
 
 ```php
-use Bentonow\BentoLaravel\BentoConnector;
-use Bentonow\BentoLaravel\Requests\GetTags;
+use Bentonow\BentoLaravel\Facades\Bento;
 
-$bento = new BentoConnector();
-
-$request = new GetTags();
-
-$response = $bento->send($request);
-return $response->json();
+return Bento::getTags()->json();
 ```
 
 ### Create Tag
 
-Creates a custom tag in your account.
+Creates a custom tag in your account:
 
 ```php
-use Bentonow\BentoLaravel\BentoConnector;
-use Bentonow\BentoLaravel\Requests\CreateTag;
+use Bentonow\BentoLaravel\Facades\Bento;
 use Bentonow\BentoLaravel\DataTransferObjects\CreateTagData;
-
-$bento = new BentoConnector();
 
 $data = new CreateTagData(name: "example tag");
 
-$request = new CreateTag($data);
-
-$response = $bento->send($request);
-return $response->json();
+return Bento::createTag($data)->json();
 ```
 
 ### Get Fields
 
-The field model is a simple named key value pair, think of it as a form field.
+The field model is a simple named key value pair, think of it as a form field:
 
 ```php
-use Bentonow\BentoLaravel\BentoConnector;
-use Bentonow\BentoLaravel\Requests\GetFields;
+use Bentonow\BentoLaravel\Facades\Bento;
 
-$bento = new BentoConnector();
-
-$request = new GetFields();
-
-$response = $bento->send($request);
-return $response->json();
+return Bento::getFields()->json();
 ```
 
 ### Create Field
 
-Creates a custom field in your account.
+Creates a custom field in your account:
 
 ```php
-use Bentonow\BentoLaravel\BentoConnector;
-use Bentonow\BentoLaravel\Requests\CreateField;
+use Bentonow\BentoLaravel\Facades\Bento;
 use Bentonow\BentoLaravel\DataTransferObjects\CreateFieldData;
-
-$bento = new BentoConnector();
 
 $data = new CreateFieldData(key: "last_name");
 
-$request = new CreateField($data);
-
-$response = $bento->send($request);
-return $response->json();
+return Bento::createField($data)->json();
 ```
 
 ### Get Broadcasts
 
-Returns a list of broadcasts in your account.
+Returns a list of broadcasts in your account:
 
 ```php
-use Bentonow\BentoLaravel\BentoConnector;
-use Bentonow\BentoLaravel\Requests\GetBroadcasts;
+use Bentonow\BentoLaravel\Facades\Bento;
 
-$bento = new BentoConnector();
-$request = new GetBroadcasts();
-$response = $bento->send($request);
-return $response->json();
+return Bento::getBroadcasts()->json();
 ```
 
 ### Create Broadcasts
 
-Create new broadcasts to be sent.
+Create new broadcasts to be sent:
 
 ```php
-use Bentonow\BentoLaravel\BentoConnector;
+use Bentonow\BentoLaravel\Facades\Bento;
 use Bentonow\BentoLaravel\DataTransferObjects\CreateBroadcastData;
 use Bentonow\BentoLaravel\DataTransferObjects\ContactData;
-use Bentonow\BentoLaravel\Requests\CreateBroadcast;
 use Bentonow\BentoLaravel\Enums\BroadcastType;
 
-$bento = new BentoConnector();
 $data = Collect([
   new CreateBroadcastData(
     name: "Campaign #1 Example",
@@ -302,89 +251,65 @@ $data = Collect([
   ),
 ]);
 
-$request = new CreateBroadcast($data);
-
-$response = $bento->send($request);
-return $response->json();
+return Bento::createBroadcast($data)->json();
 ```
 
 ### Get Site Stats
 
-Returns a list of site stats.
+Returns a list of site stats:
 
 ```php
-use Bentonow\BentoLaravel\BentoConnector;
-use Bentonow\BentoLaravel\Requests\GetSiteStats;
+use Bentonow\BentoLaravel\Facades\Bento;
 
-$bento = new BentoConnector();
-
-$request = new GetSiteStats();
-
-$response = $bento->send($request);
-return $response->json();
+return Bento::getSiteStats()->json();
 ```
 
 ### Get Segment Stats
 
-Returns a list of a segments stats.
+Returns a list of a segments stats:
 
 ```php
-use Bentonow\BentoLaravel\BentoConnector;
-use Bentonow\BentoLaravel\Requests\GetSegmentStats;
+use Bentonow\BentoLaravel\Facades\Bento;
 use Bentonow\BentoLaravel\DataTransferObjects\SegmentStatsData;
-
-$bento = new BentoConnector();
 
 $data = new SegmentStatsData(segment_id: "123");
 
-$request = new GetSegmentStats($data);
-
-$response = $bento->send($request);
-return $response->json();
+return Bento::getSegmentStats($data)->json();
 ```
 
 ### Get Report Stats
 
-Returns an object containing data for a specific report.
+Returns an object containing data for a specific report:
 
 ```php
-use Bentonow\BentoLaravel\BentoConnector;
-use Bentonow\BentoLaravel\Requests\GetReportStats;
+use Bentonow\BentoLaravel\Facades\Bento;
 use Bentonow\BentoLaravel\DataTransferObjects\ReportStatsData;
-
-$bento = new BentoConnector();
 
 $data = new ReportStatsData(report_id: "456");
 
-$request = new GetReportStats($data);
-
-$response = $bento->send($request);
-return $response->json();
-
+return Bento::getReportStats($data)->json();
 ```
 
 ### Search Blacklists
 
-Validates the IP or domain name with industry email reputation services to check for delivery issues.
+Validates the IP or domain name with industry email reputation services to check for delivery issues:
 
 ```php
-use Bentonow\BentoLaravel\BentoConnector;
+use Bentonow\BentoLaravel\Facades\Bento;
 use Bentonow\BentoLaravel\DataTransferObjects\BlacklistStatusData;
-use Bentonow\BentoLaravel\Requests\GetBlacklistStatus;
 
-$bento = new BentoConnector();
 $data = new BlacklistStatusData(domain: null, ipAddress: "1.1.1.1");
-$request = new GetBlacklistStatus($data);
-$response = $bento->send($request);
-return $response->json();
+return Bento::getBlacklistStatus($data)->json();
 ```
 
 ### Validate Email
 
-Validates the email address using the provided information to infer its validity.
+Validates the email address using the provided information to infer its validity:
 
 ```php
-$bento = new BentoConnector();
+use Bentonow\BentoLaravel\Facades\Bento;
+use Bentonow\BentoLaravel\DataTransferObjects\ValidateEmailData;
+
 $data = new ValidateEmailData(
   emailAddress: "test@example.com",
   fullName: "John Snow",
@@ -392,62 +317,44 @@ $data = new ValidateEmailData(
   ipAddress: null
 );
 
-$request = new ValidateEmail($data);
-$response = $bento->send($request);
-return $response->json();
-
+return Bento::validateEmail($data)->json();
 ```
 
 ### Moderate Content
 
-An opinionated Content moderation.
+An opinionated Content moderation:
 
 ```php
-use Bentonow\BentoLaravel\BentoConnector;
+use Bentonow\BentoLaravel\Facades\Bento;
 use Bentonow\BentoLaravel\DataTransferObjects\ContentModerationData;
-use Bentonow\BentoLaravel\Requests\GetContentModeration;
 
-$bento = new BentoConnector();
-$data = new ContentModerationData(
-  "Its just so fluffy!"
-);
-$request = new GetContentModeration($data);
-$response = $bento->send($request);
-return $response->json();
+$data = new ContentModerationData("Its just so fluffy!");
+return Bento::getContentModeration($data)->json();
 ```
 
 ### Guess Gender
 
-Guess a subscriber's gender using their first and last name. Best for US users; based on US Census Data.
+Guess a subscriber's gender using their first and last name. Best for US users; based on US Census Data:
 
 ```php
-use Bentonow\BentoLaravel\BentoConnector;
+use Bentonow\BentoLaravel\Facades\Bento;
 use Bentonow\BentoLaravel\DataTransferObjects\GenderData;
-use Bentonow\BentoLaravel\Requests\GetGender;
 
-$bento = new BentoConnector();
 $data = new GenderData("John Doe");
-$request = new GetGender($data);
-$response = $bento->send($request);
-return $response->json();
+return Bento::getGender($data)->json();
 ```
 
 ### Geolocate Ip Address
 
-This endpoint attempts to geolocate the provided IP address.
+This endpoint attempts to geolocate the provided IP address:
 
 ```php
-use Bentonow\BentoLaravel\BentoConnector;
+use Bentonow\BentoLaravel\Facades\Bento;
 use Bentonow\BentoLaravel\DataTransferObjects\GeoLocateIpData;
-use Bentonow\BentoLaravel\Requests\GeoLocateIp;
 
-$bento = new BentoConnector();
 $data = new GeoLocateIpData("1.1.1.1");
-$request = new GeoLocateIp($data);
-$response = $bento->send($request);
-return $response->json();
+return Bento::geoLocateIp($data)->json();
 ```
-
 
 ## Things to Know
 
