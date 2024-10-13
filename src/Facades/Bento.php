@@ -4,26 +4,26 @@ declare(strict_types=1);
 
 namespace Bentonow\BentoLaravel\Facades;
 
-use Illuminate\Support\Facades\Facade;
-use Bentonow\BentoLaravel\Requests\CreateEvents;
-use Bentonow\BentoLaravel\Requests\ImportSubscribers;
-use Bentonow\BentoLaravel\Requests\FindSubscriber;
-use Bentonow\BentoLaravel\Requests\CreateSubscriber;
-use Bentonow\BentoLaravel\Requests\SubscriberCommand;
-use Bentonow\BentoLaravel\Requests\GetTags;
-use Bentonow\BentoLaravel\Requests\CreateTag;
-use Bentonow\BentoLaravel\Requests\GetFields;
-use Bentonow\BentoLaravel\Requests\CreateField;
-use Bentonow\BentoLaravel\Requests\GetBroadcasts;
 use Bentonow\BentoLaravel\Requests\CreateBroadcast;
-use Bentonow\BentoLaravel\Requests\GetSiteStats;
-use Bentonow\BentoLaravel\Requests\GetSegmentStats;
-use Bentonow\BentoLaravel\Requests\GetReportStats;
-use Bentonow\BentoLaravel\Requests\GetBlacklistStatus;
-use Bentonow\BentoLaravel\Requests\ValidateEmail;
-use Bentonow\BentoLaravel\Requests\GetContentModeration;
-use Bentonow\BentoLaravel\Requests\GetGender;
+use Bentonow\BentoLaravel\Requests\CreateEvents;
+use Bentonow\BentoLaravel\Requests\CreateField;
+use Bentonow\BentoLaravel\Requests\CreateSubscriber;
+use Bentonow\BentoLaravel\Requests\CreateTag;
+use Bentonow\BentoLaravel\Requests\FindSubscriber;
 use Bentonow\BentoLaravel\Requests\GeoLocateIp;
+use Bentonow\BentoLaravel\Requests\GetBlacklistStatus;
+use Bentonow\BentoLaravel\Requests\GetBroadcasts;
+use Bentonow\BentoLaravel\Requests\GetContentModeration;
+use Bentonow\BentoLaravel\Requests\GetFields;
+use Bentonow\BentoLaravel\Requests\GetGender;
+use Bentonow\BentoLaravel\Requests\GetReportStats;
+use Bentonow\BentoLaravel\Requests\GetSegmentStats;
+use Bentonow\BentoLaravel\Requests\GetSiteStats;
+use Bentonow\BentoLaravel\Requests\GetTags;
+use Bentonow\BentoLaravel\Requests\ImportSubscribers;
+use Bentonow\BentoLaravel\Requests\SubscriberCommand;
+use Bentonow\BentoLaravel\Requests\ValidateEmail;
+use Illuminate\Support\Facades\Facade;
 
 /**
  * @method static \Illuminate\Http\Client\Response trackEvent(\Illuminate\Support\Collection $data)
@@ -50,8 +50,6 @@ class Bento extends Facade
 {
     /**
      * Get the registered name of the component.
-     *
-     * @return string
      */
     protected static function getFacadeAccessor(): string
     {
@@ -77,9 +75,6 @@ class Bento extends Facade
 
     /**
      * Get the request class for the given method.
-     *
-     * @param string $method
-     * @return ?string
      */
     private static function getRequestClass(string $method): ?string
     {

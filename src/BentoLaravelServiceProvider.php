@@ -20,13 +20,11 @@ class BentoLaravelServiceProvider extends ServiceProvider
 
         $this->registerCommands();
 
-        Mail::extend('bento', fn (array $config = []) => new BentoTransport());
+        Mail::extend('bento', fn (array $config = []) => new BentoTransport);
     }
 
     /**
      * Register the package's commands.
-     *
-     * @return void
      */
     protected function registerCommands(): void
     {
@@ -45,6 +43,6 @@ class BentoLaravelServiceProvider extends ServiceProvider
             'bentonow'
         );
 
-        $this->app->singleton('bento', fn ($app) => new BentoConnector());
+        $this->app->singleton('bento', fn ($app) => new BentoConnector);
     }
 }
