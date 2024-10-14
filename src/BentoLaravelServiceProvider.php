@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 namespace Bentonow\BentoLaravel;
 
 use Illuminate\Support\Facades\Mail;
@@ -18,17 +20,13 @@ class BentoLaravelServiceProvider extends ServiceProvider
 
         $this->registerCommands();
 
-        Mail::extend('bento', function (array $config = []) {
-            return new BentoTransport;
-        });
+        Mail::extend('bento', fn (array $config = []) => new BentoTransport);
     }
 
     /**
      * Register the package's commands.
-     *
-     * @return void
      */
-    protected function registerCommands()
+    protected function registerCommands(): void
     {
         if ($this->app->runningInConsole()) {
             $this->commands([
@@ -44,5 +42,7 @@ class BentoLaravelServiceProvider extends ServiceProvider
             __DIR__.'/../config/bentonow.php',
             'bentonow'
         );
+
+        $this->app->singleton('bento', fn ($app) => new BentoConnector);
     }
 }

@@ -60,7 +60,7 @@
         "Bentonow\\BentoLaravel\\BentoLaravelServiceProvider"
       ],
       "aliases": {
-        "BentoLaravel": "Bentonow\\BentoLaravel\\BentoLaravelFacade"
+        "Bento": "Bentonow\\BentoLaravel\\Facades\\Bento"
       }
     }
   }
