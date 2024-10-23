@@ -93,7 +93,7 @@ use Bentonow\BentoLaravel\DataTransferObjects\EventData;
 
 $data = collect([
   new EventData(
-    type: "$completed_onboarding",
+    type: '$completed_onboarding',
     email: "user@example.com",
     fields: [
       "first_name" => "John",
