@@ -35,7 +35,7 @@ class CreateBroadcastData
             'segment_id' => $this->segment_id,
             'batch_size_per_hour' => $this->batch_size_per_hour,
             'send_at' => $this->send_at,
-            'approved' => $this->approved
+            'approved' => $this->approved,
         ];
     }
 }
