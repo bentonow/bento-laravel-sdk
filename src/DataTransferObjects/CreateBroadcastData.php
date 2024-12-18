@@ -19,7 +19,7 @@ class CreateBroadcastData
         public readonly string $segment_id,
         public readonly int $batch_size_per_hour,
         public readonly string $send_at,
-        public readonly int $approved = 0,
+        public readonly int $approved = 0
     ) {}
 
     public function __toArray(): array
