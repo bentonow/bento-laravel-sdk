@@ -29,14 +29,14 @@
   ],
   "require": {
     "php": ">=8.1",
-    "saloonphp/saloon": "^3.0"
+    "saloonphp/saloon": "^v3.10.1"
   },
   "require-dev": {
-    "laravel/pint": "^1.17",
-    "orchestra/testbench": "^9.2",
-    "pestphp/pest": "^2.35",
-    "pestphp/pest-plugin-laravel": "^2.4",
-    "spatie/ray": "^1.41"
+    "laravel/pint": "^v1.19.0",
+    "orchestra/testbench": "^v9.9.0",
+    "pestphp/pest": "^v3.7.1",
+    "pestphp/pest-plugin-laravel": "^v3.0.0",
+    "spatie/ray": "^1.41.4"
   },
   "autoload": {
     "psr-4": {
