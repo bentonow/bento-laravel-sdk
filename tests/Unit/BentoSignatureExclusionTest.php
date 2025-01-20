@@ -58,7 +58,7 @@ test('missing required parameters invalidate signature', function (): void {
     parse_str(parse_url($signedUrl, PHP_URL_QUERY), $params);
 
     // Create URL with only signature (missing expires)
-    $urlWithParams = '/test-route?signature=' . $params['signature'];
+    $urlWithParams = '/test-route?signature='.$params['signature'];
 
     $this->get($urlWithParams)
         ->assertForbidden();
