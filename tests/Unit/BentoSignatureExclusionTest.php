@@ -23,18 +23,18 @@ test('invalid signature fails', function (): void {
         ->assertForbidden();
 });
 
-test('excluded parameters dont invalidate signature', function (): void {
+test('additional parameters dont invalidate signature', function (): void {
     // Get the signed URL first
     $signedUrl = URL::signedRoute('test.route');
 
     // Get the signature parameters
     parse_str(parse_url($signedUrl, PHP_URL_QUERY), $params);
 
-    // Create parameters array with excluded parameters
+    // Create parameters array with additional parameters
     $urlParams = [
-        'utm_source' => 'test',
-        'fbclid' => '123',
-        'bento_uuid' => '456',
+        'random_param' => 'test',
+        'tracking_id' => '123',
+        'user_id' => '456',
         'signature' => $params['signature'],
     ];
 
@@ -50,39 +50,28 @@ test('excluded parameters dont invalidate signature', function (): void {
         ->assertOk();
 });
 
-test('non excluded parameters invalidate signature', function (): void {
+test('missing required parameters invalidate signature', function (): void {
     // Get the signed URL first
-    $signedUrl = URL::signedRoute('test.route');
+    $signedUrl = URL::temporarySignedRoute('test.route', now()->addMinutes(30));
 
     // Get the signature parameters
     parse_str(parse_url($signedUrl, PHP_URL_QUERY), $params);
 
-    // Create parameters array with non-excluded parameter
-    $urlParams = [
-        'other_param' => 'test',
-        'signature' => $params['signature'],
-    ];
-
-    // Add expires parameter if it exists in the original URL
-    if (isset($params['expires'])) {
-        $urlParams['expires'] = $params['expires'];
-    }
-
-    // Create URL with parameters
-    $urlWithParams = '/test-route?'.http_build_query($urlParams);
+    // Create URL with only signature (missing expires)
+    $urlWithParams = '/test-route?signature=' . $params['signature'];
 
     $this->get($urlWithParams)
         ->assertForbidden();
 });
 
-test('multiple excluded parameters are handled correctly', function (): void {
+test('multiple additional parameters are handled correctly', function (): void {
     // Get the signed URL first
     $signedUrl = URL::signedRoute('test.route');
 
     // Get the signature parameters
     parse_str(parse_url($signedUrl, PHP_URL_QUERY), $params);
 
-    // Create parameters array with multiple excluded parameters
+    // Create parameters array with multiple additional parameters
     $urlParams = [
         'utm_source' => 'facebook',
         'utm_medium' => 'social',
@@ -91,6 +80,8 @@ test('multiple excluded parameters are handled correctly', function (): void {
         'utm_term' => 'sale',
         'fbclid' => 'abc123',
         'bento_uuid' => '456',
+        'random_param1' => 'value1',
+        'random_param2' => 'value2',
         'signature' => $params['signature'],
     ];
 
@@ -106,14 +97,14 @@ test('multiple excluded parameters are handled correctly', function (): void {
         ->assertOk();
 });
 
-test('query parameters are preserved after validation', function (): void {
+test('query parameters are cleaned after validation', function (): void {
     // Get the signed URL first
     $signedUrl = URL::signedRoute('test.route');
 
     // Get the signature parameters
     parse_str(parse_url($signedUrl, PHP_URL_QUERY), $params);
 
-    // Parameters to test
+    // Parameters that should be removed
     $testParams = [
         'utm_source' => 'facebook',
         'fbclid' => 'abc123',
@@ -135,23 +126,29 @@ test('query parameters are preserved after validation', function (): void {
     $response = $this->get($urlWithParams);
     $response->assertOk();
 
-    // Verify parameters are preserved
+    // Verify additional parameters are removed
     foreach ($testParams as $key => $value) {
-        expect(request()->query($key))->toBe($value);
+        expect(request()->query($key))->toBeNull();
+    }
+
+    // Verify required parameters are preserved
+    expect(request()->query('signature'))->toBe($params['signature']);
+    if (isset($params['expires'])) {
+        expect(request()->query('expires'))->toBe($params['expires']);
     }
 });
 
-// Optional: Test with temporary URL specifically
 test('works with temporary signed urls', function (): void {
     $signedUrl = URL::temporarySignedRoute('test.route', now()->addMinutes(30));
 
     // Get the signature parameters
     parse_str(parse_url($signedUrl, PHP_URL_QUERY), $params);
 
-    // Create parameters array
+    // Create parameters array with additional parameters
     $urlParams = [
         'utm_source' => 'test',
         'fbclid' => '123',
+        'random_param' => 'value',
         'signature' => $params['signature'],
         'expires' => $params['expires'],
     ];

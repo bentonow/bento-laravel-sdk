@@ -362,7 +362,7 @@ return Bento::geoLocateIp($data)->json();
 2. For event tracking and data importing, use the BentoConnector class.
 3. All API requests are made using strongly-typed request classes for better type safety.
 4. The SDK supports Laravel's environment-based configuration for easy setup across different environments.
-5. For signed emails with return urls, please assign the `bento.signature` middleware or the `BentoSignatureExclusion::class`
+5. For signed emails with return urls, please assign the `bento.signature` middleware or the `BentoSignatureExclusion::class`. This must be before the signed middleware to remove all utm and tracking url params.
 6. Bento does not support `no-reply` sender addresses for transactional emails. You MUST use an author you have configured as your sender address.
 7. For more advanced usage, refer to the [Bento API Documentation](https://docs.bentonow.com).
 
