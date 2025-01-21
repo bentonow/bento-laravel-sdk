@@ -24,7 +24,6 @@ class GetReportStats extends Request
     protected function defaultQuery(): array
     {
         return [
-            'site_uuid' => config('bentonow.siteUUID'),
             'report_id' => $this->data->report_id,
         ];
     }
