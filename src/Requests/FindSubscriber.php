@@ -24,7 +24,6 @@ class FindSubscriber extends Request
     protected function defaultQuery(): array
     {
         return [
-            'site_uuid' => config('bentonow.siteUUID'),
             'email' => $this->email,
         ];
     }
