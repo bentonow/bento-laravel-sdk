@@ -1,0 +1,78 @@
+name: Release
+
+on:
+  workflow_dispatch:
+    inputs:
+      version:
+        description: 'Version number (e.g., 1.0.0)'
+        required: true
+        type: string
+permissions:
+  contents: write
+  pull-requests: write
+
+jobs:
+  release:
+    runs-on: ubuntu-latest
+    permissions:
+      contents: write
+      pull-requests: read
+    steps:
+      - uses: actions/checkout@v3
+        with:
+          fetch-depth: 0
+          token: ${{ secrets.GITHUB_TOKEN }}
+
+      - name: Setup PHP
+        uses: shivammathur/setup-php@v2
+        with:
+          php-version: '8.2'
+          coverage: xdebug
+          tools: composer
+
+      - name: Install dependencies
+        run: composer install --prefer-dist --no-progress
+
+      - name: Run Laravel Pint
+        run: ./vendor/bin/pint
+
+      - name: Run Pest Tests
+        run: ./vendor/bin/pest --ci
+
+      - name: Set version
+        run: |
+          echo "VERSION=${{ github.event.inputs.version }}" >> $GITHUB_ENV
+          echo "PREVIOUS_TAG=$(git describe --tags --abbrev=0)" >> $GITHUB_ENV
+
+      - name: Generate Release Notes
+        id: release_notes
+        uses: actions/github-script@v6
+        with:
+          script: |
+            const script = require('./.github/scripts/generate-release-notes.js')
+            const notes = await script({github, context})
+            core.setOutput('notes', notes)
+
+      - name: Commit version bump
+        run: |
+          git config --local user.email "action@github.com"
+          git config --local user.name "GitHub Action"
+          git tag v${{ env.VERSION }}
+          git push && git push --tags
+
+      - name: Create GitHub Release
+        uses: softprops/action-gh-release@v1
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+        with:
+          tag_name: v${{ env.VERSION }}
+          name: Release v${{ env.VERSION }}
+          body: ${{ steps.release_notes.outputs.notes }}
+          draft: false
+          prerelease: false
+
+      - name: Update Packagist
+        run: |
+          curl -XPOST -H'content-type:application/json' \
+          'https://packagist.org/api/update-package?username=${{ secrets.PACKAGIST_USERNAME }}&apiToken=${{ secrets.PACKAGIST_TOKEN }}' \
+          -d'{"repository":{"url":"https://github.com/bentonow/bento-laravel-sdk"}}'

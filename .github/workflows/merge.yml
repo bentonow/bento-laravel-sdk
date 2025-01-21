@@ -1,0 +1,47 @@
+name: Merge Checks
+
+on: [push]
+
+jobs:
+  build:
+    strategy:
+      matrix:
+        php: ['8.2']
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v2
+        with:
+          ref: ${{ github.head_ref }}
+          token: ${{ secrets.GITHUB_TOKEN }}
+
+      - uses: shivammathur/setup-php@v2
+        with:
+          php-version: ${{ matrix.php }}
+          tools: composer
+          coverage: xdebug
+
+      - name: Install dependencies
+        run: composer update -W --no-progress
+
+      - name: Setup Node.js
+        uses: actions/setup-node@v3
+        with:
+          node-version: '18'
+
+      - name: Run Laravel Pint
+        run: ./vendor/bin/pint
+
+      - name: Commit Pint changes if any
+        run: |
+          if git diff --quiet; then
+            echo "No changes to commit"
+          else
+            git config --local user.email "action@github.com"
+            git config --local user.name "GitHub Action"
+            git add .
+            git commit -m "style: apply pint fixes"
+            git push
+          fi
+
+      - name: Run Pest Tests
+        run: ./vendor/bin/pest --ci

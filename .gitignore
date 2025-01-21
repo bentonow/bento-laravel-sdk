@@ -1,23 +1,44 @@
+# OS generated files
+.DS_Store
+.DS_Store?
+._*
+.Spotlight-V100
+.Trashes
+ehthumbs.db
+Thumbs.db
+
+# Composer
 /vendor/
-node_modules/
-npm-debug.log
-yarn-error.log
+composer.lock
+composer.phar
 
-# Laravel 4 specific
-bootstrap/compiled.php
-app/storage/
+# IDE and editor files
+.idea/
+.vscode/
+*.swp
+*.swo
+*~
+*.sublime-workspace
+*.sublime-project
 
-# Laravel 5 & Lumen specific
-public/storage
-public/hot
-
-# Laravel 5 & Lumen specific with changed public path
-public_html/storage
-public_html/hot
-
-storage/*.key
-.env
-Homestead.yaml
-Homestead.json
-/.vagrant
+# PHP files
+*.log
+.php_cs.cache
+.php_cs
 .phpunit.result.cache
+.phpunit.cache
+
+# Build and test artifacts
+/build/
+/coverage/
+/docs/
+phpunit.xml
+.phpunit.result.cache
+
+# Environment files
+.env
+.env.*
+!.env.example
+
+# Keep the dist file
+!phpunit.xml.dist
