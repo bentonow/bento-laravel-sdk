@@ -11,6 +11,16 @@ use Illuminate\Routing\Exceptions\InvalidSignatureException;
 class BentoSignatureExclusion
 {
     /**
+     * List of parameters required for Laravel's signed URLs
+     *
+     * @var array<string>
+     */
+    private const REQUIRED_PARAMETERS = [
+        'expires',
+        'signature',
+    ];
+
+    /**
      * Handle an incoming request.
      *
      * @return mixed
@@ -19,34 +29,32 @@ class BentoSignatureExclusion
      */
     public function handle(Request $request, Closure $next)
     {
-        $excludedParameters = [
-            'fbclid',
-            'utm_campaign',
-            'utm_content',
-            'utm_medium',
-            'utm_source',
-            'utm_term',
-            'bento_uuid',
-        ];
-
-        // Clone the request query parameters
+        // Get all current query parameters
         $queryParams = $request->query->all();
 
-        // Remove excluded parameters from the cloned query
-        foreach ($excludedParameters as $param) {
-            unset($queryParams[$param]);
-        }
+        // Filter to keep only required parameters
+        $cleanedParams = array_filter(
+            $queryParams,
+            fn ($key) => in_array($key, self::REQUIRED_PARAMETERS, true),
+            ARRAY_FILTER_USE_KEY
+        );
 
-        // Create a new request for validation
+        // Create a new request with only the required parameters for validation
         $validationRequest = Request::create(
             $request->url(),
             $request->method(),
-            $queryParams
+            $cleanedParams
         );
 
         if (! $validationRequest->hasValidSignature()) {
             throw new InvalidSignatureException;
         }
+
+        // Replace the query parameters in the original request with the cleaned ones
+        $request->query->replace($cleanedParams);
+
+        // Update the server's QUERY_STRING
+        $request->server->set('QUERY_STRING', http_build_query($cleanedParams));
 
         return $next($request);
     }
