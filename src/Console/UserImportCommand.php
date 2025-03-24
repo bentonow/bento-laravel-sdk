@@ -22,10 +22,14 @@ class UserImportCommand extends Command
 
     public function handle(): int
     {
-        $users = User::select('name', 'email')->get();
-        $users->chunk(500)->each(function ($chunk): void {
-            $importResult = (new UserImportAction)->execute(
-                $chunk->map(function ($user) {
+        $totalSuccess = 0;
+        $totalFailures = 0;
+
+        User::select('name', 'email')
+            ->lazy(500)
+            ->chunk(500)
+            ->each(function ($chunk) use (&$totalSuccess, &$totalFailures) {
+                $subscribers = $chunk->collect()->map(function ($user) {
                     return new ImportSubscribersData(
                         email: $user->email,
                         firstName: Str::of($user->name)
@@ -39,14 +43,17 @@ class UserImportCommand extends Command
                         removeTags: null,
                         fields: ['imported_at' => now()]
                     );
+                });
 
-                })
-            );
-            $this->success = +$importResult['results'];
-            $this->failures = +$importResult['failed'];
-        });
+                $importResult = (new UserImportAction)->execute($subscribers);
+                ray($importResult);
+                $totalSuccess += $importResult['results'];
+                $totalFailures += $importResult['failed'];
 
-        $this->info("Successfully imported {$this->success} users. Failed to import {$this->failures} users.");
+                $this->info("Processed batch: {$importResult['results']} successful, {$importResult['failed']} failed");
+            });
+        ray($totalSuccess, $totalFailures);
+        $this->info("Completed! Successfully imported {$totalSuccess} users. Failed to import {$totalFailures} users.");
 
         return self::SUCCESS;
     }

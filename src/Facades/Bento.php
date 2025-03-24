@@ -81,6 +81,7 @@ class Bento extends Facade
         $mapping = [
             'trackEvent' => CreateEvents::class,
             'importSubscribers' => ImportSubscribers::class,
+            'upsertSubscribers' => ImportSubscribers::class,
             'findSubscriber' => FindSubscriber::class,
             'createSubscriber' => CreateSubscriber::class,
             'subscriberCommand' => SubscriberCommand::class,
