@@ -49,10 +49,10 @@ class UserImportCommand extends Command
                 ray($importResult);
                 $totalSuccess += $importResult['results'];
                 $totalFailures += $importResult['failed'];
-                
+
                 $this->info("Processed batch: {$importResult['results']} successful, {$importResult['failed']} failed");
             });
-    ray($totalSuccess, $totalFailures);
+        ray($totalSuccess, $totalFailures);
         $this->info("Completed! Successfully imported {$totalSuccess} users. Failed to import {$totalFailures} users.");
 
         return self::SUCCESS;

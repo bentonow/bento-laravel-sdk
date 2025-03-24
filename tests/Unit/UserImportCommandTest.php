@@ -2,27 +2,22 @@
 
 use App\Models\User;
 use Bentonow\BentoLaravel\Actions\UserImportAction;
-use Bentonow\BentoLaravel\BentoConnector;
 use Bentonow\BentoLaravel\Console\UserImportCommand;
 use Bentonow\BentoLaravel\DataTransferObjects\ImportSubscribersData;
-use Bentonow\BentoLaravel\Requests\ImportSubscribers;
 use Illuminate\Console\Command;
 use Illuminate\Console\OutputStyle;
 use Illuminate\Support\Collection;
 use Illuminate\Support\LazyCollection;
 use Mockery;
-use Saloon\Http\Auth\BasicAuthenticator;
-use Saloon\Http\Faking\MockClient;
-use Saloon\Http\Faking\MockResponse;
 use Symfony\Component\Console\Input\ArrayInput;
 use Symfony\Component\Console\Output\BufferedOutput;
 
 beforeEach(function () {
     // Create test users
     $this->users = collect([
-        (object)['name' => 'John Doe', 'email' => 'john@example.com'],
-        (object)['name' => 'Jane Smith', 'email' => 'jane@example.com'],
-        (object)['name' => 'Bob Wilson', 'email' => 'bob@example.com'],
+        (object) ['name' => 'John Doe', 'email' => 'john@example.com'],
+        (object) ['name' => 'Jane Smith', 'email' => 'jane@example.com'],
+        (object) ['name' => 'Bob Wilson', 'email' => 'bob@example.com'],
     ]);
 
     // Mock config values
@@ -35,7 +30,7 @@ beforeEach(function () {
 
 it('processes users in batches and tracks results correctly', function () {
     // Mock the User model
-    $userMock = Mockery::mock('overload:' . User::class);
+    $userMock = Mockery::mock('overload:'.User::class);
     $userMock->shouldReceive('select')
         ->once()
         ->with('name', 'email')
@@ -47,7 +42,7 @@ it('processes users in batches and tracks results correctly', function () {
         ->andReturn(LazyCollection::make($this->users));
 
     // Mock the UserImportAction class
-    $actionMock = Mockery::mock('overload:' . UserImportAction::class);
+    $actionMock = Mockery::mock('overload:'.UserImportAction::class);
     $actionMock->shouldReceive('execute')
         ->once()
         ->withArgs(function ($collection) {
@@ -89,14 +84,14 @@ it('processes users in batches and tracks results correctly', function () {
 it('handles large datasets with multiple batches', function () {
     // Create a large dataset (1001 users)
     $largeDataset = collect(range(1, 1001))->map(function ($i) {
-        return (object)[
+        return (object) [
             'name' => "User{$i} Name{$i}",
-            'email' => "user{$i}@example.com"
+            'email' => "user{$i}@example.com",
         ];
     });
 
     // Mock the User model
-    $userMock = Mockery::mock('overload:' . User::class);
+    $userMock = Mockery::mock('overload:'.User::class);
     $userMock->shouldReceive('select')
         ->once()
         ->with('name', 'email')
@@ -108,7 +103,7 @@ it('handles large datasets with multiple batches', function () {
         ->andReturn(LazyCollection::make($largeDataset));
 
     // Mock the UserImportAction class - it gets called once with the entire collection
-    $actionMock = Mockery::mock('overload:' . UserImportAction::class);
+    $actionMock = Mockery::mock('overload:'.UserImportAction::class);
     $actionMock->shouldReceive('execute')
         ->once()
         ->andReturn(['results' => 1500, 'failed' => 0]);
@@ -131,7 +126,7 @@ it('handles large datasets with multiple batches', function () {
 
 it('handles empty dataset gracefully', function () {
     // Mock the User model with empty dataset
-    $userMock = Mockery::mock('overload:' . User::class);
+    $userMock = Mockery::mock('overload:'.User::class);
     $userMock->shouldReceive('select')
         ->once()
         ->with('name', 'email')
@@ -160,7 +155,7 @@ it('handles empty dataset gracefully', function () {
 
 it('handles partial failures correctly', function () {
     // Mock the User model
-    $userMock = Mockery::mock('overload:' . User::class);
+    $userMock = Mockery::mock('overload:'.User::class);
     $userMock->shouldReceive('select')
         ->once()
         ->with('name', 'email')
@@ -172,7 +167,7 @@ it('handles partial failures correctly', function () {
         ->andReturn(LazyCollection::make($this->users));
 
     // Mock the UserImportAction class with some failures
-    $actionMock = Mockery::mock('overload:' . UserImportAction::class);
+    $actionMock = Mockery::mock('overload:'.UserImportAction::class);
     $actionMock->shouldReceive('execute')
         ->once()
         ->andReturn(['results' => 1, 'failed' => 2]);
