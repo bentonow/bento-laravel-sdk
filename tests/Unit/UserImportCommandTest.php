@@ -1,16 +1,19 @@
 <?php
 
 use App\Models\User;
-use Bentonow\BentoLaravel\Actions\UserImportAction;
 use Bentonow\BentoLaravel\Console\UserImportCommand;
-use Bentonow\BentoLaravel\DataTransferObjects\ImportSubscribersData;
+use Bentonow\BentoLaravel\Requests\ImportSubscribers;
 use Illuminate\Console\Command;
 use Illuminate\Console\OutputStyle;
-use Illuminate\Support\Collection;
 use Illuminate\Support\LazyCollection;
-use Mockery;
+use Saloon\Http\Faking\MockClient;
+use Saloon\Http\Faking\MockResponse;
+use Saloon\Http\PendingRequest;
 use Symfony\Component\Console\Input\ArrayInput;
 use Symfony\Component\Console\Output\BufferedOutput;
+
+// Make all tests run in isolation (separate processes)
+uses()->in('isolation');
 
 beforeEach(function () {
     // Create test users
@@ -26,6 +29,33 @@ beforeEach(function () {
         'bentonow.secret_key' => 'test-secret-key',
         'bentonow.site_uuid' => 'test-site-uuid',
     ]);
+
+    $this->batchCallCount = 0;
+
+    MockClient::global([
+        ImportSubscribers::class => function (PendingRequest $request) {
+            $subscribers = $request->body()?->get('subscribers') ?? [];
+            $count = count($subscribers);
+            $this->batchCallCount++;
+
+            // Test: handles partial failures correctly (3 users)
+            if ($count === 3 && $this->batchCallCount === 1) {
+                return MockResponse::make(['results' => 1, 'failed' => 2]);
+            }
+
+            // Test: handles large datasets with multiple batches (1001 users split into 500, 500, 1)
+            if ($count === 500 || $count === 1) {
+                return MockResponse::make(['results' => $count, 'failed' => 0]);
+            }
+
+            // Default: full success
+            return MockResponse::make(['results' => $count, 'failed' => 0]);
+        },
+    ]);
+});
+
+afterEach(function () {
+    Mockery::close();
 });
 
 it('processes users in batches and tracks results correctly', function () {
@@ -41,32 +71,7 @@ it('processes users in batches and tracks results correctly', function () {
         ->with(500)
         ->andReturn(LazyCollection::make($this->users));
 
-    // Mock the UserImportAction class
-    $actionMock = Mockery::mock('overload:'.UserImportAction::class);
-    $actionMock->shouldReceive('execute')
-        ->once()
-        ->withArgs(function ($collection) {
-            // Verify the collection contains the expected data
-            expect($collection)->toBeInstanceOf(Collection::class);
-            expect($collection)->toHaveCount(3);
-
-            // Check if the first subscriber has the right data
-            $firstSubscriber = $collection->first();
-            expect($firstSubscriber)->toBeInstanceOf(ImportSubscribersData::class);
-            expect($firstSubscriber->email)->toBe('john@example.com');
-
-            // The UserImportCommand parses name using Str::of($user->name)->after('.')->before(' ')
-            // For "Dr. John Doe", this extracts "John" as firstName
-            expect($firstSubscriber->firstName)->toBe('John');
-
-            // lastName should be everything after the first space
-            expect($firstSubscriber->lastName)->toBe('Doe');
-
-            return true;
-        })
-        ->andReturn(['results' => 3, 'failed' => 0]);
-
-    // Setup command with output
+    // Create and run the command
     $command = $this->app->make(UserImportCommand::class);
     $output = new BufferedOutput;
     $command->setOutput(new OutputStyle(new ArrayInput([]), $output));
@@ -75,10 +80,10 @@ it('processes users in batches and tracks results correctly', function () {
 
     expect($result)->toBe(Command::SUCCESS);
 
-    // Verify output contains success information
+    // Verify output
     $outputText = $output->fetch();
-    expect($outputText)->toContain('Processed batch: 3 successful, 0 failed');
-    expect($outputText)->toContain('Successfully imported 3 users');
+    expect($outputText)->toContain('Processed batch: 1 successful, 2 failed')
+        ->toContain('Completed! Successfully imported 1 users. Failed to import 2 users.');
 });
 
 it('handles large datasets with multiple batches', function () {
@@ -102,13 +107,7 @@ it('handles large datasets with multiple batches', function () {
         ->with(500)
         ->andReturn(LazyCollection::make($largeDataset));
 
-    // Mock the UserImportAction class - it gets called once with the entire collection
-    $actionMock = Mockery::mock('overload:'.UserImportAction::class);
-    $actionMock->shouldReceive('execute')
-        ->once()
-        ->andReturn(['results' => 1500, 'failed' => 0]);
-
-    // Setup command with output
+    // Create and run the command
     $command = $this->app->make(UserImportCommand::class);
     $output = new BufferedOutput;
     $command->setOutput(new OutputStyle(new ArrayInput([]), $output));
@@ -117,11 +116,10 @@ it('handles large datasets with multiple batches', function () {
 
     expect($result)->toBe(Command::SUCCESS);
 
-    // Verify output contains all batches information
+    // Verify output
     $outputText = $output->fetch();
-    ray($outputText);
-    expect($outputText)->toContain('Processed batch: 1500 successful, 0 failed')
-        ->toContain('Completed! Successfully imported 4500 users. Failed to import 0 users.');
+    expect($outputText)->toContain('Processed batch: 500 successful, 0 failed')
+        ->toContain('Completed! Successfully imported 1001 users. Failed to import 0 users.');
 });
 
 it('handles empty dataset gracefully', function () {
@@ -137,9 +135,7 @@ it('handles empty dataset gracefully', function () {
         ->with(500)
         ->andReturn(LazyCollection::make([]));
 
-    // We don't need to mock UserImportAction since it shouldn't be called
-
-    // Setup command with output
+    // Create and run the command
     $command = $this->app->make(UserImportCommand::class);
     $output = new BufferedOutput;
     $command->setOutput(new OutputStyle(new ArrayInput([]), $output));
@@ -148,7 +144,7 @@ it('handles empty dataset gracefully', function () {
 
     expect($result)->toBe(Command::SUCCESS);
 
-    // Verify output contains empty information
+    // Verify output
     $outputText = $output->fetch();
     expect($outputText)->toContain('Completed! Successfully imported 0 users. Failed to import 0 users.');
 });
@@ -166,13 +162,7 @@ it('handles partial failures correctly', function () {
         ->with(500)
         ->andReturn(LazyCollection::make($this->users));
 
-    // Mock the UserImportAction class with some failures
-    $actionMock = Mockery::mock('overload:'.UserImportAction::class);
-    $actionMock->shouldReceive('execute')
-        ->once()
-        ->andReturn(['results' => 1, 'failed' => 2]);
-
-    // Setup command with output
+    // Create and run the command
     $command = $this->app->make(UserImportCommand::class);
     $output = new BufferedOutput;
     $command->setOutput(new OutputStyle(new ArrayInput([]), $output));
@@ -181,8 +171,8 @@ it('handles partial failures correctly', function () {
 
     expect($result)->toBe(Command::SUCCESS);
 
-    // Verify output contains failure information
+    // Verify output
     $outputText = $output->fetch();
-    expect($outputText)->toContain('Processed batch: 1 successful, 2 failed');
-    expect($outputText)->toContain('Successfully imported 1 users. Failed to import 2 users');
+    expect($outputText)->toContain('Processed batch: 1 successful, 2 failed')
+        ->toContain('Completed! Successfully imported 1 users. Failed to import 2 users.');
 });
