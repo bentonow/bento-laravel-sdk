@@ -20,10 +20,9 @@ class UserImportAction
         if ($users instanceof Collection) {
             $users = LazyCollection::make($users);
         }
-
         $users->chunk(500)->each(function ($usersChunk): void {
             $bento = new BentoConnector;
-            $request = new ImportSubscribers($usersChunk->collect());
+            $request = new ImportSubscribers($usersChunk->values());
             $importResult = $bento->send($request);
             $this->success = +$importResult->json()['results'] ?? 0;
             $this->failures = +$importResult->json()['failed'] ?? 0;
