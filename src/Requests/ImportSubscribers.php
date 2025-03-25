@@ -4,7 +4,9 @@ declare(strict_types=1);
 
 namespace Bentonow\BentoLaravel\Requests;
 
+use Bentonow\BentoLaravel\DataTransferObjects\ImportSubscribersData;
 use Illuminate\Support\Collection;
+use Illuminate\Support\LazyCollection;
 use Saloon\Contracts\Body\HasBody;
 use Saloon\Enums\Method;
 use Saloon\Http\Request;
@@ -16,8 +18,10 @@ class ImportSubscribers extends Request implements HasBody
 
     protected Method $method = Method::POST;
 
-    /* @var Collection $subscriberCollection non-empty-Collection<ImportSubscribersData> */
-    public function __construct(private readonly Collection $subscriberCollection) {}
+    /**
+     * @param  Collection<ImportSubscribersData>|LazyCollection<ImportSubscribersData>  $subscriberCollection
+     */
+    public function __construct(private readonly Collection|LazyCollection $subscriberCollection) {}
 
     public function resolveEndpoint(): string
     {
