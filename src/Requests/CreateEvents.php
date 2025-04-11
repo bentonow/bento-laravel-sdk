@@ -26,8 +26,17 @@ class CreateEvents extends Request implements HasBody
 
     protected function defaultBody(): array
     {
+        $events = $this->eventsCollection->map(function ($event) {
+            return [
+                'type' => $event->type,
+                'email' => $event->email,
+                'fields' => empty($event->fields) ? null : $event->fields,
+                'details' => empty($event->details) ? null : $event->details,
+            ];
+        });
+
         return [
-            'events' => $this->eventsCollection->toArray(),
+            'events' => $events,
         ];
     }
 }
