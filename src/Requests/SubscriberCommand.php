@@ -27,7 +27,7 @@ class SubscriberCommand extends Request implements HasBody
     protected function defaultBody(): array
     {
         return [
-            'command' => $this->commandsCollection->toArray(),
+            'command' => $this->commandsCollection->values()->toArray(),
         ];
     }
 }

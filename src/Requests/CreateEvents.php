@@ -36,7 +36,7 @@ class CreateEvents extends Request implements HasBody
         });
 
         return [
-            'events' => $events,
+            'events' => $events->values(),
         ];
     }
 }

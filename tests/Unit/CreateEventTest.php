@@ -291,3 +291,31 @@ it('converts empty arrays to null in fields and details', function (): void {
         ->and($request->body()->get('events')[0]['fields'])->toBeNull()
         ->and($request->body()->get('events')[0]['details'])->toBeNull();
 });
+
+it('removes array keys from events collection when serializing', function (): void {
+    $data = collect([
+        5 => new EventData(
+            type: '$page_view',
+            email: 'user1@example.com',
+        ),
+        10 => new EventData(
+            type: '$form_submission',
+            email: 'user2@example.com',
+        ),
+        15 => new EventData(
+            type: '$completed_onboarding',
+            email: 'user3@example.com',
+        ),
+    ]);
+
+    $request = new CreateEvents($data);
+    $body = $request->body()->all();
+
+    $events = $body['events']->all();
+    expect($events)->toBeArray()
+        ->and($events)->toHaveCount(3)
+        ->and(array_keys($events))->toBe([0, 1, 2])
+        ->and($events[0]['type'])->toBe('$page_view')
+        ->and($events[1]['type'])->toBe('$form_submission')
+        ->and($events[2]['type'])->toBe('$completed_onboarding');
+});
