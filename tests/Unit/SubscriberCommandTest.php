@@ -301,7 +301,6 @@ it('removes array keys from commands collection when serializing', function () {
 
     $request = new SubscriberCommand($data);
     $body = $request->body()->all();
-    
 
     expect($body['command'])->toBeArray()
         ->and($body['command'])->toHaveCount(3)
