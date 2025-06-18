@@ -6,7 +6,7 @@ use function Pest\Laravel\artisan;
 
 it('shows a notice and does not update .env if declined', function () {
     $envPath = base_path('.env.testing');
-    file_put_contents($envPath, "");
+    file_put_contents($envPath, '');
 
     $process = artisan('bento:install')
         ->expectsQuestion('Enter your Bento Publishable Key', 'test-publishable-key')

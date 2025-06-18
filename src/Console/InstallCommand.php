@@ -3,8 +3,9 @@
 namespace Bentonow\BentoLaravel\Console;
 
 use Illuminate\Console\Command;
-use function Laravel\Prompts\text;
+
 use function Laravel\Prompts\confirm;
+use function Laravel\Prompts\text;
 
 class InstallCommand extends Command
 {
@@ -63,7 +64,7 @@ class InstallCommand extends Command
             $this->line("BENTO_PUBLISHABLE_KEY=\"$publishableKey\"");
             $this->line("BENTO_SECRET_KEY=\"$secretKey\"");
             $this->line("BENTO_SITE_UUID=\"$siteUuid\"");
-            $this->line("MAIL_MAILER=bento");
+            $this->line('MAIL_MAILER=bento');
             $this->line("MAIL_FROM_ADDRESS=\"$authorEmail\"");
             $this->line('');
             $this->line('Learn more: https://docs.bentonow.com/laravel or https://app.bentonow.com');
@@ -91,8 +92,9 @@ class InstallCommand extends Command
     protected function updateEnv(array $data): void
     {
         $envPath = base_path('.env');
-        if (!file_exists($envPath)) {
+        if (! file_exists($envPath)) {
             $this->warn('.env file not found.');
+
             return;
         }
         $env = file_get_contents($envPath);
