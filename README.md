@@ -56,29 +56,36 @@ Install the package via Composer:
 composer require bentonow/bento-laravel-sdk
 ```
 
-### Configuration
+### Configuration (Prompt-Based)
 
-1. Publish the configuration file:
+After installing, run the install command to set up your environment interactively:
 
 ```bash
-php artisan vendor:publish --tag bentonow
+php artisan bento:install
 ```
 
-2. Add a new mailer definition in `config/mail.php`:
+You will be prompted for:
+- Your Bento Publishable Key
+- Your Bento Secret Key
+- Your Bento Site UUID
+- The author email for transactional mail
+- Whether you want to automatically update your `.env` file
 
-```php
-'bento' => [
-  'transport' => 'bento',
-],
-```
+If you decline automatic `.env` modification, the command will display the required environment variables for you to copy and add manually. You will also see links to the [Bento Laravel documentation](https://docs.bentonow.com/laravel) and the [Bento app](https://app.bentonow.com).
 
-3. Add your Bento API keys to your `.env` file:
+> **Note:**
+> The install command uses [Laravel Prompts](https://laravel.com/docs/12.x/prompts) for a modern, interactive setup experience. This requires Laravel 10+ and PHP 8.1+.
+
+### Manual Configuration (Advanced)
+
+If you prefer, you can manually add the following to your `.env` file:
 
 ```dotenv
-BENTO_PUBLISHABLE_KEY="bento-publishable-key"
-BENTO_SECRET_KEY="bento-secret-key"
-BENTO_SITE_UUID="bento-site-uuid"
-MAIL_MAILER="bento"
+BENTO_PUBLISHABLE_KEY="your-publishable-key"
+BENTO_SECRET_KEY="your-secret-key"
+BENTO_SITE_UUID="your-site-uuid"
+MAIL_MAILER=bento
+MAIL_FROM_ADDRESS="author@example.com"
 ```
 
 ## Modules
