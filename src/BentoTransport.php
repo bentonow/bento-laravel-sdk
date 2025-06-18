@@ -19,7 +19,7 @@ class BentoTransport extends AbstractTransport
             $bodyParameters = (new SentMessagePayloadTransformer)
                 ->transform($message);
 
-            Http::baseUrl(sprintf('https://%s', self::HOST))
+            $response = Http::baseUrl(sprintf('https://%s', self::HOST))
                 ->withQueryParameters([
                     'site_uuid' => config('bentonow.site_uuid', config('bentonow.siteUUID')),
                 ])
@@ -27,10 +27,17 @@ class BentoTransport extends AbstractTransport
                     config('bentonow.publishable_key', config('bentonow.publishableKey')),
                     config('bentonow.secret_key', config('bentonow.secretKey')),
                 )
-                ->post('/api/v1/batch/emails', $bodyParameters)
-                ->throw()
-                ->body();
+                ->post('/api/v1/batch/emails', $bodyParameters);
 
+            // Check for 500 error with specific error message
+            if ($response->status() === 500) {
+                $body = $response->body();
+                if (strpos($body, 'Author not authorized to send on this account') !== false) {
+                    throw new TransportException('BentoTransport: Bento Author not authorized to send on this account (500) - Check your Bento Authors update your env and try again.', 0);
+                }
+            }
+
+            $response->throw();
         } catch (ConnectionException|RequestException $e) {
             throw new TransportException('Failed to send email via BentoTransport', 0, $e);
         }
