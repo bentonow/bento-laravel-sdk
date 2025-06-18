@@ -28,7 +28,7 @@ class CreateBroadcast extends Request implements HasBody
     protected function defaultBody(): array
     {
         return [
-            'broadcasts' => $this->broadcastCollection->map(fn ($broadcast) => $broadcast->__toArray()),
+            'broadcasts' => $this->broadcastCollection->map(fn ($broadcast) => $broadcast->__toArray())->values(),
         ];
     }
 }

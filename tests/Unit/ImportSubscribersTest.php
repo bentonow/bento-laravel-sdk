@@ -133,3 +133,44 @@ it('has an error when import subscribers', function () {
         ->and($response->json('data'))->toBeEmpty()
         ->and($request->body()->get('subscribers'))->not()->toBeEmpty();
 })->throws(InternalServerErrorException::class);
+
+it('removes array keys from subscribers collection when serializing', function () {
+    $data = collect([
+        5 => new ImportSubscribersData(
+            email: 'user1@example.com',
+            firstName: 'User',
+            lastName: 'One',
+            tags: ['onboarding', 'website', 'purchased'],
+            removeTags: ['temp_subscriber'],
+            fields: ['order_count' => 2, 'lifetime_value' => 80, 'currency' => 'USD']
+        ),
+        10 => new ImportSubscribersData(
+            email: 'user2@example.com',
+            firstName: 'User',
+            lastName: 'Two',
+            tags: ['onboarding', 'mobile', 'purchased'],
+            removeTags: ['unverified'],
+            fields: ['order_count' => 1, 'lifetime_value' => 1000, 'currency' => 'USD']
+        ),
+        15 => new ImportSubscribersData(
+            email: 'user3@example.com',
+            firstName: 'User',
+            lastName: 'Three',
+            tags: ['onboarding', 'mobile', 'purchased'],
+            removeTags: ['unverified'],
+            fields: ['order_count' => 1, 'lifetime_value' => 1000, 'currency' => 'USD']
+        ),
+    ]);
+
+    $request = new ImportSubscribers($data);
+    $body = $request->body()->all();
+
+    $subscribers = $body['subscribers']->all();
+
+    expect($subscribers)->toBeArray()
+        ->and($subscribers)->toHaveCount(3)
+        ->and(array_keys($subscribers))->toBe([0, 1, 2])
+        ->and($subscribers[0]['email'])->toBe('user1@example.com')
+        ->and($subscribers[1]['email'])->toBe('user2@example.com')
+        ->and($subscribers[2]['email'])->toBe('user3@example.com');
+});

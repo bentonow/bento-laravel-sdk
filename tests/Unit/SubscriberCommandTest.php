@@ -279,3 +279,34 @@ it('can change a subscriber email', function () {
         ->and($request->body()->get('command')[0]->email)->toBeString()->toBe('test@example.com')
         ->and($request->body()->get('command')[0]->query)->toBeString()->toBe('test2@example.com');
 });
+
+it('removes array keys from commands collection when serializing', function () {
+    $data = collect([
+        5 => new CommandData(
+            Command::ADD_TAG,
+            'user1@example.com',
+            'tag1'
+        ),
+        10 => new CommandData(
+            Command::REMOVE_TAG,
+            'user2@example.com',
+            'tag2'
+        ),
+        15 => new CommandData(
+            Command::ADD_FIELD,
+            'user3@example.com',
+            'field1'
+        ),
+    ]);
+
+    $request = new SubscriberCommand($data);
+    $body = $request->body()->all();
+    
+
+    expect($body['command'])->toBeArray()
+        ->and($body['command'])->toHaveCount(3)
+        ->and(array_keys($body['command']))->toBe([0, 1, 2])
+        ->and($body['command'][0]->command->value)->toBe('add_tag')
+        ->and($body['command'][1]->command->value)->toBe('remove_tag')
+        ->and($body['command'][2]->command->value)->toBe('add_field');
+});

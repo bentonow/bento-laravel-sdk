@@ -31,7 +31,7 @@ class ImportSubscribers extends Request implements HasBody
     protected function defaultBody(): array
     {
         return [
-            'subscribers' => $this->subscriberCollection->map(fn ($subscriber) => $subscriber->__toArray()),
+            'subscribers' => $this->subscriberCollection->map(fn ($subscriber) => $subscriber->__toArray())->values(),
         ];
     }
 }
