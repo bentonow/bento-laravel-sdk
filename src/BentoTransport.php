@@ -57,7 +57,7 @@ class BentoTransport extends AbstractTransport
                     $e
                 );
             }
-            throw new TransportException('Failed to send email via BentoTransport: ' . $e->getMessage(), $e->getCode(), $e);
+            throw new TransportException('Failed to send email via BentoTransport: '.$e->getMessage(), $e->getCode(), $e);
         }
     }
 
