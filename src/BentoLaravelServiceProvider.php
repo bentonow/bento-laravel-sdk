@@ -26,7 +26,7 @@ class BentoLaravelServiceProvider extends ServiceProvider
 
         // Register the middleware
         $this->app['router']->aliasMiddleware('bento.signature', BentoSignatureExclusion::class);
-        
+
         // Register the Bento Mail transport
         Mail::extend('bento', fn (array $config = []) => new BentoTransport);
     }

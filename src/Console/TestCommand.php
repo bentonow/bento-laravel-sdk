@@ -3,9 +3,8 @@
 namespace Bentonow\BentoLaravel\Console;
 
 use Illuminate\Console\Command;
-use Illuminate\Support\Facades\Mail;
 use Illuminate\Mail\Message;
-use Illuminate\Support\Facades\Config;
+use Illuminate\Support\Facades\Mail;
 
 class TestCommand extends Command
 {
@@ -19,6 +18,7 @@ class TestCommand extends Command
         if (config('mail.default') !== 'bento') {
             $this->error('Bento is not configured as your default mailer.');
             $this->line('Please configure Bento for transactional emails in your .env file first (bento:install).');
+
             return self::FAILURE;
         }
 
@@ -27,10 +27,11 @@ class TestCommand extends Command
         if (empty($fromAddress)) {
             $this->error('No from address configured.');
             $this->line('Please set MAIL_FROM_ADDRESS in your .env file.');
+
             return self::FAILURE;
         }
 
-        $this->info('Sending test email to ' . $fromAddress . '...');
+        $this->info('Sending test email to '.$fromAddress.'...');
 
         try {
             Mail::html('<p>This is a test email from your Laravel application using Bento transport.</p>', function (Message $message) use ($fromAddress) {
@@ -40,12 +41,14 @@ class TestCommand extends Command
             });
 
             $this->info('Test email sent successfully! ✨');
-            $this->line('Please check your inbox at ' . $fromAddress);
+            $this->line('Please check your inbox at '.$fromAddress);
+
             return self::SUCCESS;
         } catch (\Exception $e) {
             $this->error('Failed to send test email:');
             $this->line($e->getMessage());
+
             return self::FAILURE;
         }
     }
-} 
+}
