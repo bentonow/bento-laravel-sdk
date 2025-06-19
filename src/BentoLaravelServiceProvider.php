@@ -15,14 +15,19 @@ class BentoLaravelServiceProvider extends ServiceProvider
         if ($this->app->runningInConsole()) {
             $this->publishes([
                 __DIR__.'/../config/bentonow.php' => config_path('bentonow.php'),
-            ], 'bentonow');
+            ], 'bento-config');
+
+            $this->publishes([
+                __DIR__.'/../config/mail.php' => config_path('mail.php'),
+            ], 'bento-mail-config');
         }
 
         $this->registerCommands();
 
         // Register the middleware
         $this->app['router']->aliasMiddleware('bento.signature', BentoSignatureExclusion::class);
-
+        
+        // Register the Bento Mail transport
         Mail::extend('bento', fn (array $config = []) => new BentoTransport);
     }
 
@@ -35,6 +40,7 @@ class BentoLaravelServiceProvider extends ServiceProvider
             $this->commands([
                 Console\UserImportCommand::class,
                 Console\InstallCommand::class,
+                Console\TestCommand::class,
             ]);
         }
     }
@@ -45,6 +51,11 @@ class BentoLaravelServiceProvider extends ServiceProvider
             __DIR__.'/../config/bentonow.php',
             'bentonow'
         );
+
+        // Merge the Bento mailer configuration
+        $this->app['config']->set('mail.mailers.bento', [
+            'transport' => 'bento',
+        ]);
 
         $this->app->singleton('bento', fn ($app) => new BentoConnector);
     }
