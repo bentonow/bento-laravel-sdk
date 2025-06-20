@@ -68,13 +68,16 @@ You will be prompted for:
 - Your Bento Publishable Key
 - Your Bento Secret Key
 - Your Bento Site UUID
-- The author email for transactional mail
+- Whether you want to enable Bento for transactional emails
+- The author email for transactional mail (if transactional emails are enabled)
+- Whether you want to send a test email after configuration
 - Whether you want to automatically update your `.env` file
 
 If you decline automatic `.env` modification, the command will display the required environment variables for you to copy and add manually. You will also see links to the [Bento Laravel documentation](https://docs.bentonow.com/laravel) and the [Bento app](https://app.bentonow.com).
 
 > **Note:**
 > The install command uses [Laravel Prompts](https://laravel.com/docs/12.x/prompts) for a modern, interactive setup experience. This requires Laravel 10+ and PHP 8.1+.
+
 
 ### Manual Configuration (Advanced)
 
@@ -87,6 +90,22 @@ BENTO_SITE_UUID="your-site-uuid"
 MAIL_MAILER=bento
 MAIL_FROM_ADDRESS="author@example.com"
 ```
+
+### Testing Your Configuration
+
+You can verify your transactional email configuration by running:
+
+```bash
+php artisan bento:test
+```
+
+This command will:
+- Verify that Bento is configured as your default mailer
+- Send a test email to your configured `MAIL_FROM_ADDRESS`
+- Provide immediate feedback on the success or failure of the test
+
+> **Note:**
+> The test command requires Bento to be configured as your default mailer (`MAIL_MAILER=bento`) and a valid `MAIL_FROM_ADDRESS` to be set.
 
 ## Modules
 

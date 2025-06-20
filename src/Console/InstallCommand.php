@@ -13,8 +13,24 @@ class InstallCommand extends Command
 
     protected $name = 'bento:install';
 
+    private function displayHeader(): void
+    {
+        $this->line('');
+        $this->line('     ██████╗ ███████╗███╗   ██╗████████╗ ██████╗ ');
+        $this->line('     ██╔══██╗██╔════╝████╗  ██║╚══██╔══╝██╔═══██╗');
+        $this->line('     ██████╔╝█████╗  ██╔██╗ ██║   ██║   ██║   ██║');
+        $this->line('     ██╔══██╗██╔══╝  ██║╚██╗██║   ██║   ██║   ██║');
+        $this->line('     ██████╔╝███████╗██║ ╚████║   ██║   ╚██████╔╝');
+        $this->line('     ╚═════╝ ╚══════╝╚═╝  ╚═══╝   ╚═╝    ╚═════╝');
+
+        $this->line('');
+        $this->line('                Welcome to Bento!');
+    }
+
     public function handle(): int
     {
+        $this->displayHeader();
+
         $this->callSilently('vendor:publish', [
             '--tag' => 'bento-config',
         ]);
@@ -37,11 +53,25 @@ class InstallCommand extends Command
             required: true
         );
 
-        $authorEmail = text(
-            label: 'Enter the author email for transactional mail',
-            placeholder: 'author@example.com',
-            required: true
+        $enableTransactionalMail = confirm(
+            label: 'Would you like to enable Bento for transactional emails?',
+            default: true
         );
+
+        $authorEmail = '';
+        $sendTestEmail = false;
+        if ($enableTransactionalMail) {
+            $authorEmail = text(
+                label: 'Enter the author email for transactional mail',
+                placeholder: 'author@example.com',
+                required: true
+            );
+
+            $sendTestEmail = confirm(
+                label: 'Would you like to send a test email after configuration?',
+                default: true
+            );
+        }
 
         $shouldModifyEnv = confirm(
             label: 'Would you like to automatically update your .env file with these values?',
@@ -49,14 +79,25 @@ class InstallCommand extends Command
         );
 
         if ($shouldModifyEnv) {
-            $this->updateEnv([
+            $envVars = [
                 'BENTO_PUBLISHABLE_KEY' => $publishableKey,
                 'BENTO_SECRET_KEY' => $secretKey,
                 'BENTO_SITE_UUID' => $siteUuid,
-                'MAIL_MAILER' => 'bento',
-                'MAIL_FROM_ADDRESS' => $authorEmail,
-            ]);
+            ];
+
+            if ($enableTransactionalMail) {
+                $envVars['MAIL_MAILER'] = 'bento';
+                $envVars['MAIL_FROM_ADDRESS'] = $authorEmail;
+            }
+
+            $this->updateEnv($envVars);
             $this->info('Your .env file has been updated with your Bento credentials.');
+
+            if ($sendTestEmail) {
+                $this->line('');
+                $this->info('Sending test email...');
+                $this->call('bento:test');
+            }
         } else {
             $this->warn("\nBento was not able to update your .env file.\n");
             $this->line('Please add the following to your .env file:');
@@ -64,8 +105,10 @@ class InstallCommand extends Command
             $this->line("BENTO_PUBLISHABLE_KEY=\"$publishableKey\"");
             $this->line("BENTO_SECRET_KEY=\"$secretKey\"");
             $this->line("BENTO_SITE_UUID=\"$siteUuid\"");
-            $this->line('MAIL_MAILER=bento');
-            $this->line("MAIL_FROM_ADDRESS=\"$authorEmail\"");
+            if ($enableTransactionalMail) {
+                $this->line('MAIL_MAILER=bento');
+                $this->line("MAIL_FROM_ADDRESS=\"$authorEmail\"");
+            }
             $this->line('');
             $this->line('Learn more: https://docs.bentonow.com/laravel or https://app.bentonow.com');
         }
