@@ -171,9 +171,7 @@ Creates a subscriber in your account and queues them for indexing:
 use Bentonow\BentoLaravel\Facades\Bento;
 use Bentonow\BentoLaravel\DataTransferObjects\CreateSubscriberData;
 
-$data = collect([
-  new CreateSubscriberData(email: "test@example.com")
-]);
+$data = new CreateSubscriberData(email: "test@example.com");
 
 return Bento::createSubscriber($data)->json();
 ```

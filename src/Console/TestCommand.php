@@ -10,7 +10,7 @@ class TestCommand extends Command
 {
     protected $description = 'Send a test email using Bento transport';
 
-    protected $name = 'bento:test';
+    protected $signature = 'bento:test';
 
     public function handle(): int
     {
