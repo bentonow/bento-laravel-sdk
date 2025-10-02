@@ -12,7 +12,9 @@ it('shows a notice and does not update .env if declined', function () {
         ->expectsQuestion('Enter your Bento Publishable Key', 'test-publishable-key')
         ->expectsQuestion('Enter your Bento Secret Key', 'test-secret-key')
         ->expectsQuestion('Enter your Bento Site UUID', 'test-site-uuid')
+        ->expectsConfirmation('Would you like to enable Bento for transactional emails?', 'yes')
         ->expectsQuestion('Enter the author email for transactional mail', 'author@example.com')
+        ->expectsConfirmation('Would you like to send a test email after configuration?', 'no')
         ->expectsConfirmation('Would you like to automatically update your .env file with these values?', 'no')
         ->expectsConfirmation('Would you like to star the repo on GitHub?', 'no')
         ->assertExitCode(0);
