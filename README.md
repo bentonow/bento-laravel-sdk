@@ -142,8 +142,8 @@ use Bentonow\BentoLaravel\DataTransferObjects\ImportSubscribersData;
 $data = collect([
   new ImportSubscribersData(
     email: "user@example.com",
-    first_name: "John",
-    last_name: "Doe",
+    firstName: "John",
+    lastName: "Doe",
     tags: ["lead", "mql"],
     removeTags: ["customers"],
     fields: ["role" => "ceo"]
