@@ -24,8 +24,8 @@ class UserImportAction
             $bento = new BentoConnector;
             $request = new ImportSubscribers($usersChunk->values());
             $importResult = $bento->send($request);
-            $this->success = +$importResult->json()['results'] ?? 0;
-            $this->failures = +$importResult->json()['failed'] ?? 0;
+            $this->success += $importResult->json()['results'] ?? 0;
+            $this->failures += $importResult->json()['failed'] ?? 0;
         });
 
         return ['results' => $this->success, 'failed' => $this->failures];

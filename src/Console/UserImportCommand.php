@@ -16,10 +16,6 @@ class UserImportCommand extends Command
 
     protected $name = 'bento:import-users';
 
-    private int $success = 0;
-
-    private int $failures = 0;
-
     public function handle(): int
     {
         $totalSuccess = 0;

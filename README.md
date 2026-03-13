@@ -42,7 +42,7 @@ Table of contents
 
 ## Requirements
 
-- PHP 8.0+
+- PHP 8.1+
 - Laravel 10.0+
 - Bento API Keys
 
@@ -378,6 +378,183 @@ use Bentonow\BentoLaravel\DataTransferObjects\GeoLocateIpData;
 
 $data = new GeoLocateIpData("1.1.1.1");
 return Bento::geoLocateIp($data)->json();
+```
+
+### Get Email Template
+
+Retrieve a single email template by ID:
+
+```php
+use Bentonow\BentoLaravel\Facades\Bento;
+
+return Bento::getEmailTemplate(123)->json();
+```
+
+### Update Email Template
+
+Update an email template's subject and/or HTML content. Only the fields you provide will be updated:
+
+```php
+use Bentonow\BentoLaravel\Facades\Bento;
+use Bentonow\BentoLaravel\DataTransferObjects\UpdateEmailTemplateData;
+
+$data = new UpdateEmailTemplateData(
+  id: 123,
+  subject: "Updated Subject",
+  html: "<p>Updated content</p>"
+);
+
+return Bento::updateEmailTemplate($data)->json();
+```
+
+### Get Sequences
+
+Returns a list of sequences in your account. Supports pagination:
+
+```php
+use Bentonow\BentoLaravel\Facades\Bento;
+
+return Bento::getSequences()->json();
+
+// With pagination
+return Bento::getSequences(page: 2)->json();
+```
+
+### Create Sequence Email
+
+Create a new email template within a sequence:
+
+```php
+use Bentonow\BentoLaravel\Facades\Bento;
+use Bentonow\BentoLaravel\DataTransferObjects\CreateSequenceEmailData;
+
+$data = new CreateSequenceEmailData(
+  sequenceId: "123",
+  subject: "Day 1: Welcome!",
+  html: "<p>Thanks for signing up</p>",
+  delayInterval: "days",
+  delayIntervalCount: 1
+);
+
+return Bento::createSequenceEmail($data)->json();
+```
+
+### Get Workflows
+
+Returns a list of workflows in your account. Supports pagination:
+
+```php
+use Bentonow\BentoLaravel\Facades\Bento;
+
+return Bento::getWorkflows()->json();
+
+// With pagination
+return Bento::getWorkflows(page: 2)->json();
+```
+
+### Get Form Responses
+
+Get all responses for a form by its identifier:
+
+```php
+use Bentonow\BentoLaravel\Facades\Bento;
+
+return Bento::getFormResponses("my-form-id")->json();
+```
+
+### Tag Subscriber
+
+Tag a subscriber with automation triggers:
+
+```php
+use Bentonow\BentoLaravel\Facades\Bento;
+
+Bento::tagSubscriber("user@example.com", "vip");
+```
+
+### Add Subscriber
+
+Add a subscriber with automation triggers:
+
+```php
+use Bentonow\BentoLaravel\Facades\Bento;
+
+Bento::addSubscriber("user@example.com", [
+  "first_name" => "John",
+  "last_name" => "Doe"
+]);
+```
+
+### Remove Subscriber
+
+Unsubscribe a subscriber with automation triggers:
+
+```php
+use Bentonow\BentoLaravel\Facades\Bento;
+
+Bento::removeSubscriber("user@example.com");
+```
+
+### Update Fields
+
+Update custom fields on a subscriber with automation triggers:
+
+```php
+use Bentonow\BentoLaravel\Facades\Bento;
+
+Bento::updateFields("user@example.com", [
+  "plan" => "pro",
+  "company" => "Acme Inc"
+]);
+```
+
+### Track Purchase
+
+Track a purchase for LTV calculation with automation triggers. Amounts should be in cents:
+
+```php
+use Bentonow\BentoLaravel\Facades\Bento;
+
+Bento::trackPurchase("user@example.com", [
+  "unique" => ["key" => "order-123"],
+  "value" => ["amount" => 9999, "currency" => "USD"],
+  "cart" => [
+    ["product_id" => "sku-1", "quantity" => 1, "price" => 9999]
+  ]
+]);
+```
+
+### Track
+
+Track a custom event with automation triggers:
+
+```php
+use Bentonow\BentoLaravel\Facades\Bento;
+
+Bento::track(
+  "user@example.com",
+  '$completed_onboarding',
+  fields: ["first_name" => "John"],
+  details: ["step" => "final"]
+);
+```
+
+### Upsert Subscriber
+
+Create or update a subscriber and return the record:
+
+```php
+use Bentonow\BentoLaravel\Facades\Bento;
+
+$subscriber = Bento::upsertSubscriber(
+  email: "user@example.com",
+  firstName: "John",
+  lastName: "Doe",
+  tags: ["lead", "website"],
+  fields: ["role" => "ceo"]
+);
+
+return $subscriber->json();
 ```
 
 ## Things to Know
