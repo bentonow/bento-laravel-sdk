@@ -40,16 +40,16 @@ beforeEach(function () {
 
             // Test: handles partial failures correctly (3 users)
             if ($count === 3 && $this->batchCallCount === 1) {
-                return MockResponse::make(['data' => ['results' => 1, 'failed' => 2]]);
+                return MockResponse::make(['results' => 1, 'failed' => 2]);
             }
 
             // Test: handles large datasets with multiple batches (1001 users split into 500, 500, 1)
             if ($count === 500 || $count === 1) {
-                return MockResponse::make(['data' => ['results' => $count, 'failed' => 0]]);
+                return MockResponse::make(['results' => $count, 'failed' => 0]);
             }
 
             // Default: full success
-            return MockResponse::make(['data' => ['results' => $count, 'failed' => 0]]);
+            return MockResponse::make(['results' => $count, 'failed' => 0]);
         },
     ]);
 });
