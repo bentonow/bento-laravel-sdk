@@ -42,7 +42,7 @@ Table of contents
 
 ## Requirements
 
-- PHP 8.1+
+- PHP 8.2+ (8.1 supported but untested)
 - Laravel 10.0+
 - Bento API Keys
 

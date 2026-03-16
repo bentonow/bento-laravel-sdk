@@ -8,7 +8,7 @@ use App\Models\User;
 use Bentonow\BentoLaravel\Actions\UserImportAction;
 use Bentonow\BentoLaravel\DataTransferObjects\ImportSubscribersData;
 use Illuminate\Console\Command;
-use Str;
+use Illuminate\Support\Str;
 
 class UserImportCommand extends Command
 {
@@ -22,10 +22,8 @@ class UserImportCommand extends Command
         $totalFailures = 0;
 
         User::select('name', 'email')
-            ->lazy(500)
-            ->chunk(500)
-            ->each(function ($chunk) use (&$totalSuccess, &$totalFailures) {
-                $subscribers = $chunk->collect()->map(function ($user) {
+            ->chunk(500, function ($chunk) use (&$totalSuccess, &$totalFailures) {
+                $subscribers = $chunk->map(function ($user) {
                     return new ImportSubscribersData(
                         email: $user->email,
                         firstName: Str::of($user->name)
@@ -47,6 +45,7 @@ class UserImportCommand extends Command
 
                 $this->info("Processed batch: {$importResult['results']} successful, {$importResult['failed']} failed");
             });
+
         $this->info("Completed! Successfully imported {$totalSuccess} users. Failed to import {$totalFailures} users.");
 
         return self::SUCCESS;

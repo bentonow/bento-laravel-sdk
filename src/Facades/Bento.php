@@ -34,6 +34,7 @@ use Illuminate\Support\Facades\Facade;
 /**
  * @method static \Illuminate\Http\Client\Response trackEvent(\Illuminate\Support\Collection $data)
  * @method static \Illuminate\Http\Client\Response importSubscribers(\Illuminate\Support\Collection $data)
+ * @method static \Illuminate\Http\Client\Response upsertSubscribers(\Illuminate\Support\Collection $data)
  * @method static \Illuminate\Http\Client\Response findSubscriber(string $email)
  * @method static \Illuminate\Http\Client\Response createSubscriber(\Illuminate\Support\Collection $data)
  * @method static \Illuminate\Http\Client\Response subscriberCommand(\Illuminate\Support\Collection $data)
