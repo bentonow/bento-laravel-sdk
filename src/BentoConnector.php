@@ -168,7 +168,7 @@ class BentoConnector extends Connector
             ),
         ])));
 
-        if (($importResponse->json('data.results') ?? 0) === 0) {
+        if (($importResponse->json('results') ?? 0) === 0) {
             throw new \RuntimeException(
                 "Failed to upsert subscriber [{$email}]: import returned 0 results."
             );

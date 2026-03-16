@@ -174,10 +174,8 @@ it('can remove a tag from a subscriber', function () {
 it('can upsert a subscriber', function () {
     $mockClient = new MockClient([
         ImportSubscribers::class => MockResponse::make(body: [
-            'data' => [
-                'results' => 1,
-                'failed' => 0,
-            ],
+            'results' => 1,
+            'failed' => 0,
         ], status: 200),
         FindSubscriber::class => MockResponse::make(body: [
             'data' => [
@@ -211,10 +209,8 @@ it('can upsert a subscriber', function () {
 it('throws when upsert subscriber import fails', function () {
     $mockClient = new MockClient([
         ImportSubscribers::class => MockResponse::make(body: [
-            'data' => [
-                'results' => 0,
-                'failed' => 1,
-            ],
+            'results' => 0,
+            'failed' => 1,
         ], status: 200),
     ]);
 

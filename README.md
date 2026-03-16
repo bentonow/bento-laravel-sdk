@@ -107,33 +107,6 @@ This command will:
 > **Note:**
 > The test command requires Bento to be configured as your default mailer (`MAIL_MAILER=bento`) and a valid `MAIL_FROM_ADDRESS` to be set.
 
-### Validating the SDK
-
-You can validate all SDK methods against the live Bento API by running:
-
-```bash
-php artisan bento:validate
-```
-
-This command tests every SDK endpoint and displays a table of results showing which methods passed or failed, along with response shape validation details.
-
-**Options:**
-
-| Option | Description |
-|--------|-------------|
-| `--email=user@example.com` | Email address to use for subscriber tests (defaults to `MAIL_FROM_ADDRESS`) |
-| `--skip-write` | Only run read-only tests (skips imports, event tracking, tag/field creation, etc.) |
-
-```bash
-# Read-only validation (safe for production)
-php artisan bento:validate --skip-write
-
-# Full validation with a specific test email
-php artisan bento:validate --email=test@example.com
-```
-
-The command exits with code `0` if all tests pass, or `1` if any fail.
-
 ## Modules
 
 ### Event Tracking
