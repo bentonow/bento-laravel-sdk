@@ -11,23 +11,22 @@ use Illuminate\Support\LazyCollection;
 
 class UserImportAction
 {
-    private int $success = 0;
-
-    private int $failures = 0;
-
     public function execute(LazyCollection|Collection $users): array
     {
+        $success = 0;
+        $failures = 0;
+
         if ($users instanceof Collection) {
             $users = LazyCollection::make($users);
         }
-        $users->chunk(500)->each(function ($usersChunk): void {
+        $users->chunk(500)->each(function ($usersChunk) use (&$success, &$failures): void {
             $bento = new BentoConnector;
             $request = new ImportSubscribers($usersChunk->values());
             $importResult = $bento->send($request);
-            $this->success = +$importResult->json()['results'] ?? 0;
-            $this->failures = +$importResult->json()['failed'] ?? 0;
+            $success += $importResult->json()['results'] ?? 0;
+            $failures += $importResult->json()['failed'] ?? 0;
         });
 
-        return ['results' => $this->success, 'failed' => $this->failures];
+        return ['results' => $success, 'failed' => $failures];
     }
 }

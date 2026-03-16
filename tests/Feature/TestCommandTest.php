@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 use Bentonow\BentoLaravel\Console\TestCommand;
 use Illuminate\Console\Command;
 use Illuminate\Console\OutputStyle;
@@ -9,7 +11,7 @@ use Symfony\Component\Console\Input\ArrayInput;
 use Symfony\Component\Console\Output\BufferedOutput;
 
 afterEach(function () {
-    \Mockery::close();
+    Mockery::close();
 });
 
 function stripAnsiCodes(string $value): string
@@ -69,10 +71,10 @@ it('sends the test email when configuration is valid', function () {
         ->once()
         ->with(
             '<p>This is a test email from your Laravel application using Bento transport.</p>',
-            \Mockery::type('callable')
+            Mockery::type('callable')
         )
         ->andReturnUsing(function (string $html, callable $callback) {
-            $message = \Mockery::mock(Message::class);
+            $message = Mockery::mock(Message::class);
             $message->shouldReceive('to')->once()->with('sender@example.com')->andReturnSelf();
             $message->shouldReceive('subject')->once()->with('Bento Test Email')->andReturnSelf();
             $message->shouldReceive('text')
