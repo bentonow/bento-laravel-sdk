@@ -25,11 +25,17 @@ class UpdateEmailTemplate extends Request implements HasBody
 
     protected function defaultBody(): array
     {
-        return [
-            'email_template' => array_filter([
-                'subject' => $this->data->subject,
-                'html' => $this->data->html,
-            ], fn ($value) => $value !== null),
-        ];
+        $fields = array_filter([
+            'subject' => $this->data->subject,
+            'html' => $this->data->html,
+        ], fn ($value) => $value !== null);
+
+        if (empty($fields)) {
+            throw new \InvalidArgumentException(
+                'At least one of subject or html must be provided to update an email template.'
+            );
+        }
+
+        return ['email_template' => $fields];
     }
 }

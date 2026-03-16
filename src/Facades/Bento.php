@@ -58,6 +58,7 @@ use Illuminate\Support\Facades\Facade;
  * @method static \Illuminate\Http\Client\Response createSequenceEmail(\Bentonow\BentoLaravel\DataTransferObjects\CreateSequenceEmailData $data)
  * @method static \Illuminate\Http\Client\Response getWorkflows(?int $page = null)
  * @method static \Illuminate\Http\Client\Response getFormResponses(string $formIdentifier)
+ * @method static \Saloon\Http\Response removeTag(string $email, string $tagName)
  * @method static \Saloon\Http\Response tagSubscriber(string $email, string $tagName)
  * @method static \Saloon\Http\Response addSubscriber(string $email, ?array $fields = null)
  * @method static \Saloon\Http\Response removeSubscriber(string $email)
