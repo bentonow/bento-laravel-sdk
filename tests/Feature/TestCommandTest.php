@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 use Bentonow\BentoLaravel\Console\TestCommand;
 use Illuminate\Console\Command;
 use Illuminate\Console\OutputStyle;
