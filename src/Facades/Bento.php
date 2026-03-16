@@ -92,6 +92,15 @@ class Bento extends Facade
         }
 
         $requestClass = self::getRequestClass($method);
+
+        if ($requestClass === null) {
+            throw new \BadMethodCallException(sprintf(
+                'Method %s::%s does not exist.',
+                static::class,
+                $method
+            ));
+        }
+
         $request = new $requestClass(...$args);
 
         return $instance->send($request);
