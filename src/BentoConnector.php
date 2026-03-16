@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 namespace Bentonow\BentoLaravel;
 
 use Bentonow\BentoLaravel\DataTransferObjects\EventData;
