@@ -472,6 +472,16 @@ use Bentonow\BentoLaravel\Facades\Bento;
 Bento::tagSubscriber("user@example.com", "vip");
 ```
 
+### Remove Tag
+
+Remove a tag from a subscriber with automation triggers:
+
+```php
+use Bentonow\BentoLaravel\Facades\Bento;
+
+Bento::removeTag("user@example.com", "vip");
+```
+
 ### Add Subscriber
 
 Add a subscriber with automation triggers:
@@ -541,7 +551,7 @@ Bento::track(
 
 ### Upsert Subscriber
 
-Create or update a subscriber and return the record:
+Create or update a subscriber and return the record. Throws a `RuntimeException` if the import fails:
 
 ```php
 use Bentonow\BentoLaravel\Facades\Bento;
@@ -556,6 +566,17 @@ $subscriber = Bento::upsertSubscriber(
 
 return $subscriber->json();
 ```
+
+> **Note:** If the import step fails (e.g. invalid data), a `RuntimeException` is thrown instead of returning a partial response. Wrap the call in a try/catch if you need to handle failures gracefully:
+>
+> ```php
+> try {
+>     $subscriber = Bento::upsertSubscriber(email: "user@example.com");
+> } catch (\RuntimeException $e) {
+>     // Handle the failure
+>     Log::warning($e->getMessage());
+> }
+> ```
 
 ## Things to Know
 

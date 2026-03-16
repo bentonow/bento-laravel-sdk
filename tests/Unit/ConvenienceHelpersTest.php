@@ -151,6 +151,26 @@ it('can track a custom event', function () {
     $mockClient->assertSent(CreateEvents::class);
 });
 
+it('can remove a tag from a subscriber', function () {
+    $mockClient = new MockClient([
+        CreateEvents::class => MockResponse::make(body: [
+            'results' => 1,
+            'failed' => 0,
+        ], status: 200),
+    ]);
+
+    $connector = new BentoConnector;
+    $connector->authenticate(new BasicAuthenticator('publish_key', 'secret_key'));
+    $connector->withMockClient($mockClient);
+
+    $response = $connector->removeTag('user@example.com', 'vip');
+
+    expect($response->status())->toBe(200)
+        ->and($response->json('results'))->toBe(1);
+
+    $mockClient->assertSent(CreateEvents::class);
+});
+
 it('can upsert a subscriber', function () {
     $mockClient = new MockClient([
         ImportSubscribers::class => MockResponse::make(body: [
@@ -185,3 +205,18 @@ it('can upsert a subscriber', function () {
     $mockClient->assertSent(ImportSubscribers::class);
     $mockClient->assertSent(FindSubscriber::class);
 });
+
+it('throws when upsert subscriber import fails', function () {
+    $mockClient = new MockClient([
+        ImportSubscribers::class => MockResponse::make(body: [
+            'results' => 0,
+            'failed' => 1,
+        ], status: 200),
+    ]);
+
+    $connector = new BentoConnector;
+    $connector->authenticate(new BasicAuthenticator('publish_key', 'secret_key'));
+    $connector->withMockClient($mockClient);
+
+    $connector->upsertSubscriber(email: 'user@example.com');
+})->throws(RuntimeException::class, 'Failed to upsert subscriber [user@example.com]');

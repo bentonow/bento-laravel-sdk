@@ -22,6 +22,6 @@ class GetWorkflows extends Request
     {
         return array_filter([
             'page' => $this->page,
-        ]);
+        ], fn ($value) => $value !== null);
     }
 }

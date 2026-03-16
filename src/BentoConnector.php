@@ -47,6 +47,20 @@ class BentoConnector extends Connector
     }
 
     /**
+     * Remove a tag from a subscriber (triggers automations).
+     */
+    public function removeTag(string $email, string $tagName): Response
+    {
+        return $this->send(new CreateEvents(collect([
+            new EventData(
+                type: BentoEvent::REMOVE_TAG->value,
+                email: $email,
+                details: ['tag' => $tagName],
+            ),
+        ])));
+    }
+
+    /**
      * Tag a subscriber (triggers automations).
      */
     public function tagSubscriber(string $email, string $tagName): Response
@@ -153,7 +167,9 @@ class BentoConnector extends Connector
         ])));
 
         if ($importResponse->json('results') === 0) {
-            return $importResponse;
+            throw new \RuntimeException(
+                "Failed to upsert subscriber [{$email}]: import returned 0 results."
+            );
         }
 
         return $this->send(new FindSubscriber($email));
