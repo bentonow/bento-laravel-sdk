@@ -22,16 +22,19 @@ class UserImportCommand extends Command
         $totalFailures = 0;
 
         User::select('name', 'email')
-            ->chunk(500, function ($chunk) use (&$totalSuccess, &$totalFailures) {
+            ->lazy(500)
+            ->chunk(500)
+            ->each(function ($chunk) use (&$totalSuccess, &$totalFailures) {
                 $subscribers = $chunk->map(function ($user) {
                     return new ImportSubscribersData(
                         email: $user->email,
                         firstName: Str::of($user->name)
-                            ->after('.')
                             ->before(' ')
+                            ->trim()
                             ->__toString(),
                         lastName: Str::of($user->name)
                             ->after(' ')
+                            ->trim()
                             ->__toString(),
                         tags: ['onboarding_complete'],
                         removeTags: null,
