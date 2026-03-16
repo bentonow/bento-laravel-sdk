@@ -36,7 +36,7 @@ class CreateSequenceEmail extends Request implements HasBody
                 'cc' => $this->data->cc,
                 'bcc' => $this->data->bcc,
                 'to' => $this->data->to,
-            ]),
+            ], fn ($value) => $value !== null),
         ];
     }
 }

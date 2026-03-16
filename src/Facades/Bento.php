@@ -86,8 +86,8 @@ class Bento extends Facade
     {
         $instance = static::getFacadeRoot();
 
-        // If the method exists on the connector, call it directly
-        if (method_exists($instance, $method)) {
+        // If the method is a convenience helper on the connector, call it directly
+        if (method_exists($instance, $method) && ! self::getRequestClass($method)) {
             return $instance->$method(...$args);
         }
 

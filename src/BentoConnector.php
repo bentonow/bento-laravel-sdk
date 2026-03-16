@@ -141,7 +141,7 @@ class BentoConnector extends Connector
         ?array $removeTags = null,
         ?array $fields = null,
     ): Response {
-        $this->send(new ImportSubscribers(collect([
+        $importResponse = $this->send(new ImportSubscribers(collect([
             new ImportSubscribersData(
                 email: $email,
                 firstName: $firstName,
@@ -151,6 +151,10 @@ class BentoConnector extends Connector
                 fields: $fields,
             ),
         ])));
+
+        if ($importResponse->json('results') === 0) {
+            return $importResponse;
+        }
 
         return $this->send(new FindSubscriber($email));
     }

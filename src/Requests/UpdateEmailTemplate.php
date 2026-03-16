@@ -29,7 +29,7 @@ class UpdateEmailTemplate extends Request implements HasBody
             'email_template' => array_filter([
                 'subject' => $this->data->subject,
                 'html' => $this->data->html,
-            ]),
+            ], fn ($value) => $value !== null),
         ];
     }
 }
