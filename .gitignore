@@ -15,6 +15,7 @@ composer.phar
 # IDE and editor files
 .idea/
 .vscode/
+.claude/
 *.swp
 *.swo
 *~

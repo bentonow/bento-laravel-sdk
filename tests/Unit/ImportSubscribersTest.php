@@ -11,10 +11,8 @@ use Saloon\Http\Faking\MockResponse;
 it('can import subscribers', function () {
     $mockClient = new MockClient([
         ImportSubscribers::class => MockResponse::make(body: [
-            'data' => [
-                'results' => 2,
-                'failed' => 0,
-            ],
+            'results' => 2,
+            'failed' => 0,
         ], status: 200),
     ]);
 
@@ -47,18 +45,16 @@ it('can import subscribers', function () {
 
     expect($response->body())->toBeJson()
         ->and($response->status())->toBe(200)
-        ->and($response->json('data')['results'])->toBeInt()->toBe(2)
-        ->and($response->json('data')['failed'])->toBeInt()->toBe(0)
+        ->and($response->json('results'))->toBeInt()->toBe(2)
+        ->and($response->json('failed'))->toBeInt()->toBe(0)
         ->and($request->body()->get('subscribers'))->not()->toBeEmpty();
 });
 
 it('can not import subscribers', function () {
     $mockClient = new MockClient([
         ImportSubscribers::class => MockResponse::make(body: [
-            'data' => [
-                'results' => 0,
-                'failed' => 2,
-            ],
+            'results' => 0,
+            'failed' => 2,
         ], status: 200),
     ]);
 
@@ -91,8 +87,8 @@ it('can not import subscribers', function () {
 
     expect($response->body())->toBeJson()
         ->and($response->status())->toBe(200)
-        ->and($response->json('data')['results'])->toBeInt()->toBe(0)
-        ->and($response->json('data')['failed'])->toBeInt()->toBe(2)
+        ->and($response->json('results'))->toBeInt()->toBe(0)
+        ->and($response->json('failed'))->toBeInt()->toBe(2)
         ->and($request->body()->get('subscribers'))->not()->toBeEmpty();
 });
 
@@ -130,7 +126,7 @@ it('has an error when import subscribers', function () {
 
     expect($response->body())->toBeJson()
         ->and($response->status())->toBe(500)
-        ->and($response->json('data'))->toBeEmpty()
+        ->and($response->json('results'))->toBeEmpty()
         ->and($request->body()->get('subscribers'))->not()->toBeEmpty();
 })->throws(InternalServerErrorException::class);
 

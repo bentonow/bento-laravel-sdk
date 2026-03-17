@@ -8,12 +8,12 @@ jobs:
   build:
     strategy:
       matrix:
-        php: ['8.2']
+        php: ['8.2', '8.3']
     runs-on: ubuntu-latest
     permissions:
       contents: read
     steps:
-      - uses: actions/checkout@v3
+      - uses: actions/checkout@v4
         with:
           repository: ${{ github.event.pull_request.head.repo.full_name }}
           ref: ${{ github.event.pull_request.head.sha }}
@@ -26,11 +26,6 @@ jobs:
 
       - name: Install dependencies
         run: composer update -W --no-progress
-
-      - name: Setup Node.js
-        uses: actions/setup-node@v3
-        with:
-          node-version: '18'
 
       - name: Run Laravel Pint (check mode)
         run: ./vendor/bin/pint --test
