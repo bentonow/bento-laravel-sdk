@@ -31,7 +31,7 @@ jobs:
           tools: composer
 
       - name: Install dependencies
-        run: composer install --prefer-dist --no-progress
+        run: composer update -W --no-progress
 
       - name: Run Laravel Pint
         run: ./vendor/bin/pint
