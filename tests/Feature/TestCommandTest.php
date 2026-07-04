@@ -100,3 +100,30 @@ it('sends the test email when configuration is valid', function () {
         ->toContain('Test email sent successfully! ✨')
         ->toContain('Please check your inbox at sender@example.com');
 });
+
+it('prompts for the recipient when interactive, defaulting to the from address', function () {
+    config([
+        'mail.default' => 'bento',
+        'mail.from.address' => 'sender@example.com',
+    ]);
+
+    Mail::shouldReceive('html')
+        ->once()
+        ->with(
+            '<p>This is a test email from your Laravel application using Bento transport.</p>',
+            Mockery::type('callable')
+        )
+        ->andReturnUsing(function (string $html, callable $callback) {
+            $message = Mockery::mock(Message::class);
+            $message->shouldReceive('to')->once()->with('custom@example.com')->andReturnSelf();
+            $message->shouldReceive('subject')->once()->with('Bento Test Email')->andReturnSelf();
+            $message->shouldReceive('text')->once()->andReturnSelf();
+
+            $callback($message);
+        });
+
+    $this->artisan('bento:test')
+        ->expectsQuestion('Where should the test email be sent?', 'custom@example.com')
+        ->expectsOutputToContain('Sending test email to custom@example.com...')
+        ->assertExitCode(Command::SUCCESS);
+});
