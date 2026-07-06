@@ -31,17 +31,21 @@ class TestCommand extends Command
             return self::FAILURE;
         }
 
-        $this->info('Sending test email to '.$fromAddress.'...');
+        $recipient = $this->input?->isInteractive()
+            ? $this->ask('Where should the test email be sent?', $fromAddress)
+            : $fromAddress;
+
+        $this->info('Sending test email to '.$recipient.'...');
 
         try {
-            Mail::html('<p>This is a test email from your Laravel application using Bento transport.</p>', function (Message $message) use ($fromAddress) {
-                $message->to($fromAddress)
+            Mail::html('<p>This is a test email from your Laravel application using Bento transport.</p>', function (Message $message) use ($recipient) {
+                $message->to($recipient)
                     ->subject('Bento Test Email')
                     ->text('This is a test email from your Laravel application using Bento transport.');
             });
 
             $this->info('Test email sent successfully! ✨');
-            $this->line('Please check your inbox at '.$fromAddress);
+            $this->line('Please check your inbox at '.$recipient);
 
             return self::SUCCESS;
         } catch (\Exception $e) {
