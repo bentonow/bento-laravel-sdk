@@ -18,6 +18,10 @@ it('transforms a sent message with full recipient lists into the expected payloa
             new Address('cc2@example.com', 'CC Two')
         )
         ->bcc(new Address('bcc1@example.com'))
+        ->replyTo(
+            new Address('reply1@example.com'),
+            new Address('reply2@example.com', 'Reply Two')
+        )
         ->subject('Welcome to Bento')
         ->html('<p>Hello from Bento</p>');
 
@@ -43,6 +47,7 @@ it('transforms a sent message with full recipient lists into the expected payloa
             'to' => 'recipient1@example.com,recipient2@example.com',
             'cc' => 'cc1@example.com,cc2@example.com',
             'bcc' => 'bcc1@example.com',
+            'reply_to' => 'reply1@example.com,reply2@example.com',
         ]],
     ]);
 });
@@ -73,4 +78,5 @@ it('omits optional recipient lists when they are not present on the message', fu
 
     expect(array_key_exists('cc', $payload['emails'][0]))->toBeFalse();
     expect(array_key_exists('bcc', $payload['emails'][0]))->toBeFalse();
+    expect(array_key_exists('reply_to', $payload['emails'][0]))->toBeFalse();
 });

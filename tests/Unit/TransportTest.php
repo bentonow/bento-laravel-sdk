@@ -77,6 +77,18 @@ test('validate multiple ccs', function () {
     });
 });
 
+test('validate reply to', function () {
+
+    Mail::assertNothingSent();
+
+    Mail::to('test@example.com')
+        ->send((new TestMailable)->replyTo('replies@example.com'));
+
+    Mail::assertSent(TestMailable::class, function ($mail) {
+        return $mail->hasReplyTo('replies@example.com');
+    });
+});
+
 it('can get transport', function () {
 
     $this->transporter = new BentoTransport;
