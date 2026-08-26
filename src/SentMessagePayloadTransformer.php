@@ -31,6 +31,10 @@ class SentMessagePayloadTransformer
             $payload['bcc'] = $this->formatEmailAddresses($symfonyEmail->getBcc());
         }
 
+        if ($symfonyEmail->getReplyTo()) {
+            $payload['reply_to'] = $this->formatEmailAddresses($symfonyEmail->getReplyTo());
+        }
+
         return [
             'emails' => [$payload],
         ];

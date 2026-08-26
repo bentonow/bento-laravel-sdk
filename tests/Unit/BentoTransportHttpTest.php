@@ -73,6 +73,43 @@ it('sends the correct payload and authentication details to the Bento API', func
     expect($authorization)->toBe('Basic '.base64_encode('pub:sec'));
 });
 
+it('includes reply_to in the payload when present on the message', function () {
+    config([
+        'bentonow.publishable_key' => 'pub',
+        'bentonow.secret_key' => 'sec',
+        'bentonow.site_uuid' => 'site-uuid',
+    ]);
+
+    $capturedRequest = null;
+
+    Http::fake(function ($request) use (&$capturedRequest) {
+        $capturedRequest = $request;
+
+        return Http::response(['status' => 'ok'], 200);
+    });
+
+    $email = (new Email)
+        ->from(new Address('sender@example.com'))
+        ->to(new Address('recipient@example.com'))
+        ->replyTo(new Address('replies@example.com'))
+        ->subject('Subject Line')
+        ->html('<p>Body</p>');
+
+    $sentMessage = new SentMessage(
+        $email,
+        new Envelope(
+            new Address('sender@example.com'),
+            [new Address('recipient@example.com')]
+        )
+    );
+
+    makeTransport()->sendMessage($sentMessage);
+
+    $payload = json_decode($capturedRequest->body(), true);
+
+    expect($payload['emails'][0]['reply_to'])->toBe('replies@example.com');
+});
+
 it('throws a transport exception when the API returns 401', function () {
     config([
         'bentonow.publishable_key' => 'pub',
