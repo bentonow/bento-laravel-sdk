@@ -128,7 +128,7 @@ module.exports = async ({github, context}) => {
     let markdown = `## Release v${process.env.VERSION}\n\n`;
     // Add PHP version and dependency information
     markdown += '### Requirements\n\n';
-    markdown += '* The Bento Laravel SDK requires PHP 8.1 - 8.3\n';
+    markdown += '* The Bento Laravel SDK requires PHP 8.2+ (Laravel 13 requires PHP 8.3+)\n';
     markdown += '* Composer\n';
     markdown += '* Laravel Framework\n';
     markdown += '* Bento API keys\n';

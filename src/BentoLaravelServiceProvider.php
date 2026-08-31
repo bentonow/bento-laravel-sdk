@@ -41,6 +41,7 @@ class BentoLaravelServiceProvider extends ServiceProvider
                 Console\UserImportCommand::class,
                 Console\InstallCommand::class,
                 Console\TestCommand::class,
+                Console\ValidateCommand::class,
             ]);
         }
     }

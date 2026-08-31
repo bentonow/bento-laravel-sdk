@@ -13,8 +13,11 @@ function makeSentMessage(): SentMessage
     $email = (new Email)
         ->from(new Address('sender@example.com', 'Sender Name'))
         ->to(new Address('recipient@example.com', 'Recipient Name'))
+        ->replyTo(new Address('replies@example.com'))
         ->subject('Subject Line')
         ->html('<p>Body</p>');
+
+    $email->getHeaders()->addTextHeader('X-Request-ID', 'request-123');
 
     return new SentMessage(
         $email,
@@ -66,6 +69,10 @@ it('sends the correct payload and authentication details to the Bento API', func
             'html_body' => '<p>Body</p>',
             'transactional' => true,
             'to' => 'recipient@example.com',
+            'reply_to' => 'replies@example.com',
+            'headers' => [
+                'X-Request-ID' => 'request-123',
+            ],
         ]],
     ]);
 

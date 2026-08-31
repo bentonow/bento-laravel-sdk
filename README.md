@@ -42,8 +42,8 @@ Table of contents
 
 ## Requirements
 
-- PHP 8.2+ (8.1 supported but untested)
-- Laravel 10.0+
+- PHP 8.2+ (Laravel 13 requires PHP 8.3+)
+- Laravel 10.0+ (including Laravel 13)
 - Bento API Keys
 
 ## Getting started
@@ -76,7 +76,7 @@ You will be prompted for:
 If you decline automatic `.env` modification, the command will display the required environment variables for you to copy and add manually. You will also see links to the [Bento Laravel documentation](https://docs.bentonow.com/laravel) and the [Bento app](https://app.bentonow.com).
 
 > **Note:**
-> The install command uses [Laravel Prompts](https://laravel.com/docs/12.x/prompts) for a modern, interactive setup experience. This requires Laravel 10+ and PHP 8.1+.
+> The install command uses [Laravel Prompts](https://laravel.com/docs/13.x/prompts) for a modern, interactive setup experience. This requires Laravel 10+ and PHP 8.2+ (Laravel 13 requires PHP 8.3+).
 
 
 ### Manual Configuration (Advanced)
@@ -586,7 +586,8 @@ return $subscriber->json();
 4. The SDK supports Laravel's environment-based configuration for easy setup across different environments.
 5. For signed emails with return urls, please assign the `bento.signature` middleware or the `BentoSignatureExclusion::class`. This must be before the signed middleware to remove all utm and tracking url params.
 6. Bento does not support `no-reply` sender addresses for transactional emails. You MUST use an author you have configured as your sender address.
-7. For more advanced usage, refer to the [Bento API Documentation](https://docs.bentonow.com).
+7. The mail transport forwards sanitized MIME headers in the API payload, including `Reply-To` as `reply_to`. Bento supports most headers, but not every header is guaranteed to be preserved or delivered. Attachments are not supported, and Bento adds its own unsubscribe headers.
+8. For more advanced usage, refer to the [Bento API Documentation](https://docs.bentonow.com).
 
 ## Contributing
 

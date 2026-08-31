@@ -16,15 +16,15 @@ class CreateBroadcastData
         public readonly ContactData $from,
         public readonly string $inclusive_tags,
         public readonly string $exclusive_tags,
-        public readonly string $segment_id,
         public readonly int $batch_size_per_hour,
         public readonly string $send_at,
+        public readonly ?string $segment_id = null,
         public readonly int $approved = 0
     ) {}
 
     public function __toArray(): array
     {
-        return [
+        return array_filter([
             'name' => $this->name,
             'subject' => $this->subject,
             'content' => $this->content,
@@ -36,6 +36,6 @@ class CreateBroadcastData
             'batch_size_per_hour' => $this->batch_size_per_hour,
             'send_at' => $this->send_at,
             'approved' => $this->approved,
-        ];
+        ], fn ($value) => ! is_null($value));
     }
 }
